@@ -2,7 +2,7 @@
 # tun devices are handled in different way in 2.2. and 2.4 kernels.
 
 %define         _kernel_ver     %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define         _kernel24       %(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
+%define         _kernel24       %(echo %{_kernel_ver} | grep -qv '2\.4\.' ; echo $?)
 %if %{_kernel24}
 %define         _kernel_series  2.4
 %else
