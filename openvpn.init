@@ -34,7 +34,7 @@ case "$1" in
 		done
 		[ $ANYRETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
 	else
-		msg_Already_Running "OpenVPN"
+		msg_already_running "OpenVPN"
 		exit 1
 	fi
 	;;
@@ -66,7 +66,7 @@ case "$1" in
 		done
                 rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
         else
-                msg_Not_Running "OpenVPN"
+                msg_not_running "OpenVPN"
                 exit 1
         fi
 																	
@@ -85,7 +85,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-	msg_Usage: "$0 {start|stop|status|restart|reload}"
+	msg_usage: "$0 {start|stop|status|restart|reload}"
 	exit 1
 	;;
 esac
