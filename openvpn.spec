@@ -5,7 +5,7 @@ Version:	1.3.2
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://prdownloads.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
