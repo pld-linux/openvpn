@@ -34,7 +34,7 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/openvpn ]; then
 		msg_starting "OpenVPN" ; started
-		if [ -z "$TUNNELS" ] ; then
+		if [ -z "$TUNNELS" ]; then
 			nls "No tunnels configured in /etc/sysconfig/openvpn"
 			exit 6
 		fi
