@@ -1,8 +1,19 @@
+
+# tun devices are handled in different way in 2.2. and 2.4 kernels.
+
+%define         _kernel_ver     %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%define         _kernel24       %(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
+%if %{_kernel24}
+%define         _kernel_series  2.4
+%else
+%define         _kernel_series  2.2
+%endif
+
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	1.3.2
-Release:	1
+Release:	2@%{_kernel_series}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
@@ -14,10 +25,17 @@ BuildRequires:	autoconf
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7
 PreReq:		rc-scripts
+%if %{_kernel24}
+Requires:	kernel > 2.4
+%else
+Requires:	kernel < 2.3
+%endif
+
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
+
 
 %description
 OpenVPN is a robust and highly configurable VPN (Virtual Private
