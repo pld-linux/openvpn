@@ -4,7 +4,7 @@
 #
 # chkconfig:	2345 80 20
 #
-# description:	OpenVPN is a robust and highly configurable VPN (Virtual
+# description:	OpenVPN is a robust and highly configurable VPN (Virtual \
 #		Private Network) daemon
 #
 
