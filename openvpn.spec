@@ -88,7 +88,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README ChangeLog sample-config-files sample-keys
+%doc AUTHORS README ChangeLog sample-config-files sample-keys easy-rsa sample-scripts
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
