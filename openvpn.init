@@ -27,7 +27,7 @@ fi
 # Get service config
 [ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
 
-
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
@@ -43,9 +43,9 @@ case "$1" in
 			daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
 				--config "/etc/openvpn/$tun.conf" --cd /etc/openvpn
 			RET=$?
-			[ "$RETVAL" -eq 0 ] && RETVAL=$RET
+			[ $RETVAL -eq 0 ] && RETVAL=$RET
 		done
-		[ "$RETVAL" -eq 0 ] && touch /var/lock/subsys/openvpn
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
 	else
 		msg_already_running "OpenVPN"
 	fi
@@ -91,9 +91,9 @@ case "$1" in
 		busy
 		for pid in /var/run/openvpn/*.pid ; do
 			kill -HUP $pid
-			[ $? -ne 0 -a "$RETVAL" -eq 0 ] && RETVAL=7
+			[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
 		done
-		[ "$RETVAL" -eq 0 ] && ok || died
+		[ $RETVAL -eq 0 ] && ok || died
         else
                 msg_not_running OpenSSH >&2
                 exit 7
