@@ -102,9 +102,9 @@ case "$1" in
 	fi 		
 	;;
   restart)
-	$0 stop
+	$0 stop "$TUNNELS"
 	sleep 1
-	$0 start
+	$0 start "$TUNNELS"
 	exit $?
 	;;
   *)
