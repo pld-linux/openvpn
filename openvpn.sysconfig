@@ -1,8 +1,8 @@
-# Customized setings for sysconf
+# Customized settings for openvpn
 
 # Nice level for sysconf
 SERVICE_RUN_NICE_LEVEL="+5"
 
-#Tunnels to set up. For each tunnel name there should be config file in /etc/openvpn
+# Tunnels to set up. For each tunnel name, there should be config file in /etc/openvpn
 #TUNNELS="mytunnel"
 TUNNELS=""
