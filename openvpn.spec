@@ -2,12 +2,12 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0
-%define	_rc	rc12
+%define	_rc	rc13
 Release:	2.%{_rc}.1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/beta/%{name}-%{version}_%{_rc}.tar.gz
-# Source0-md5:	ac734f5dddf72032ab150d6b3e3c5298
+# Source0-md5:	19308d8f435ae15c9a3cec17c75f4ca1
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.net/
