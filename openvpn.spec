@@ -34,7 +34,7 @@ internet.
 %build
 aclocal
 autoheader
-autoconf
+%{__autoconf}
 %configure \
 	%{!?debug:--disable-debug} \
 	--disable-opto
