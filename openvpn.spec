@@ -28,9 +28,9 @@ BuildRequires:	openssl-devel >= 0.9.7c
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 %if %{_kernel24}
-Requires:	kernel > 2.4
+%{!?_without_dist_kernel:Requires: kernel > 2.4}
 %else
-Requires:	kernel < 2.3
+%{!?_without_dist_kernel:Requires: kernel < 2.3}
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
