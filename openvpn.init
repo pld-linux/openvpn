@@ -1,11 +1,11 @@
 #!/bin/sh
 #
-# openvpn       Start/stop the VPN daemon.
+# openvpn	Start/stop the VPN daemon.
 #
 # chkconfig:	2345 80 20
 #
 # description:	OpenVPN is a robust and highly configurable VPN (Virtual
-#               Private Network) daemon
+#		Private Network) daemon
 #
 
 # Source function library
@@ -39,9 +39,9 @@ case "$1" in
 	fi
 	;;
   stop)
-        # Stop daemons.
-        if [ -f /var/lock/subsys/openvpn ]; then
-                msg_stopping "OpenVPN"; started
+	# Stop daemons.
+	if [ -f /var/lock/subsys/openvpn ]; then
+		msg_stopping "OpenVPN"; started
   		for pidfile in /var/run/openvpn/*.pid ; do
 			[ -f "$pidfile" ] || continue
 			pid=`cat "$pidfile"`
@@ -64,12 +64,11 @@ case "$1" in
 			fi
 			ok
 		done
-                rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
-        else
-                msg_not_running "OpenVPN"
-                exit 1
-        fi
-																	
+		rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
+	else
+		msg_not_running "OpenVPN"
+		exit 1
+	fi
 	;;
   status)
 	status openvpn
@@ -85,7 +84,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-	msg_usage: "$0 {start|stop|status|restart|reload}"
+	msg_usage "$0 {start|stop|restart|reload|status}"
 	exit 1
 	;;
 esac
