@@ -2,11 +2,11 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0
-Release:	0.test28.1
+Release:	0.test29.1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://openvpn.sourceforge.net/beta/%{name}-%{version}_test28.tar.gz
-# Source0-md5:	1ead67e2692e237d9c137ee55b1bc805
+Source0:	http://openvpn.sourceforge.net/beta/%{name}-%{version}_test29.tar.gz
+# Source0-md5:	5785df3ab1c6b9c0da4a8e96923780fd
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
@@ -33,7 +33,7 @@ lub wiêcej prywatnych sieci u¿ywaj±c zaszyfrowanego tunelu poprzez
 internet.
 
 %prep
-%setup -q -n %{name}-%{version}_test28
+%setup -q -n %{name}-%{version}_test29
 
 %build
 %{__aclocal}
