@@ -27,6 +27,8 @@ fi
 # Get service config
 [ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
 
+[ -n "$2" ] && TUNNELS="$2"
+
 RETVAL=0
 # See how we were called.
 case "$1" in
