@@ -60,7 +60,7 @@ internet.
 # problem with malloc
 #%{__automake}
 
-%configure 
+%configure
 %{__make} #CFLAGS="%{rpmcflags}"
 
 %install
@@ -91,11 +91,11 @@ if [ "$1" = "0" ]; then
 		/etc/rc.d/init.d/openvpn stop 1>&2
 	fi
 	/sbin/chkconfig --del openvpn
-fi    
+fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README ChangeLog sample-config-files sample-keys 
+%doc AUTHORS README ChangeLog sample-config-files sample-keys
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
