@@ -57,7 +57,8 @@ internet.
 %{__automake}
 
 %configure \
-	--enable-pthread
+	--enable-pthread \
+	--enable-iproute2
 %{__make}
 
 %install
