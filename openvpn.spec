@@ -24,7 +24,7 @@ URL:		http://openvpn.sourceforge.net/
 #BuildRequires:	automake
 #BuildRequires:	autoconf
 BuildRequires:	lzo-devel
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.7c
 PreReq:		rc-scripts
 %if %{_kernel24}
 Requires:	kernel > 2.4
