@@ -2,22 +2,22 @@
 # tun devices are handled in different way in 2.2. and 2.4 kernels.
 
 %define         _kernel_ver     %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define         _kernel24       %(echo %{_kernel_ver} | grep -qv '2\.4\.' ; echo $?)
-%if %{_kernel24}
-%define         _kernel_series  2.4
-%else
+%define         _kernel22       %(echo %{_kernel_ver} | grep -qv '2\.2\.' ; echo $?)
+%if %{_kernel22}
 %define         _kernel_series  2.2
+%else
+%define         _kernel_series  2.4
 %endif
 
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	1.6
-Release:	0.5.0@%{_kernel_series}
+Release:	0.beta6.1@%{_kernel_series}
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}_beta5.tar.gz
-# Source0-md5:	009d0b140af92b0598079a003abaf381
+Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}_beta6.tar.gz
+# Source0-md5:	4a42baa356dfaee2c074a010286aa8d7
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
@@ -27,10 +27,10 @@ BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-%if %{_kernel24}
-%{!?_without_dist_kernel:Requires: kernel > 2.4}
-%else
+%if %{_kernel22}
 %{!?_without_dist_kernel:Requires: kernel < 2.3}
+%else
+%{!?_without_dist_kernel:Requires: kernel > 2.4}
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -48,7 +48,7 @@ lub wiêcej prywatnych sieci u¿ywaj±c zaszyfrowanego tunelu poprzez
 internet.
 
 %prep
-%setup -q -n %{name}-%{version}_beta5
+%setup -q -n %{name}-%{version}_beta6
 
 %build
 %{__aclocal}
