@@ -36,20 +36,18 @@ case "$1" in
 		msg_starting "OpenVPN" ; started
 		if [ -z "$TUNNELS" ] ; then
 			nls "No tunnels configured in /etc/sysconfig/openvpn"
-			exit 1
+			exit 6
 		fi
-		ANYRETVAL=0
 		for tun in $TUNNELS ; do
 			show "Starting OpenVPN tunnel %s" "$tun"
 			daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
 				--config "/etc/openvpn/$tun.conf" --cd /etc/openvpn
-			RETVAL=$?
-			[ $RETVAL -eq 0 ] || ANYRETVAL=$RETVAL
+			RET=$?
+			[ $RETVAL -eq 0 ] && RETVAL=$RET
 		done
-		[ $ANYRETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
 	else
 		msg_already_running "OpenVPN"
-		exit 1
 	fi
 	;;
   stop)
@@ -81,36 +79,35 @@ case "$1" in
 		rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
 	else
 		msg_not_running "OpenVPN"
-		exit 1
 	fi
 	;;
   status)
 	status openvpn
+	exit $?
 	;;
-  reload)
+  reload|force-reload)
 	if [ -f /var/lock/subsys/openvpn ]; then
 		msg_reloading "OpenVPN"
 		busy
-		RETVAL=0
 		for pid in /var/run/openvpn/*.pid ; do
 			kill -HUP $pid
-			[ $RETVAL -eq 0 ] && RETVAL=$?
+			[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
 		done
 		[ $RETVAL -eq 0 ] && ok || died
         else
-                msg_not_running OpenSSH
-                exit 1
+                msg_not_running OpenSSH >&2
+                exit 7
 	fi 		
 	;;
   restart)
 	$0 stop
 	sleep 1
 	$0 start
+	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
-	;;
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
