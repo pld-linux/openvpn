@@ -1,12 +1,12 @@
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
-Version:	1.6
-Release:	0.rc3.2
+Version:	2.0
+Release:	0.test18.1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}_rc3.tar.gz
-# Source0-md5:	170bf70610bf9a9b498a5d97f6a3fcc7
+Source0:	http://openvpn.sourceforge.net/beta/%{name}-%{version}_test18.tar.gz
+# Source0-md5:	383f4e36cedf132e097d070c0ec0b71f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
@@ -33,7 +33,7 @@ lub wiêcej prywatnych sieci u¿ywaj±c zaszyfrowanego tunelu poprzez
 internet.
 
 %prep
-%setup -q -n %{name}-%{version}_rc3
+%setup -q -n %{name}-%{version}_test18
 
 %build
 %{__aclocal}
@@ -51,7 +51,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/openvpn,%{_sbindir},%{_mandir}/man8} \
 	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},/var/run/openvpn}
 
-install %{name} $RPM_BUILD_ROOT%{_sbindir}
+install openvpn $RPM_BUILD_ROOT%{_sbindir}
 install *.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -80,7 +80,7 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS README ChangeLog sample-config-files sample-keys easy-rsa sample-scripts
 %attr(755,root,root) %{_sbindir}/*
-%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
 %attr(754,root,root) %config(noreplace) /etc/rc.d/init.d/%{name}
 %{_mandir}/man?/*
