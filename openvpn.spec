@@ -21,22 +21,20 @@ Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}_beta13.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
-#BuildRequires:	automake
-#BuildRequires:	autoconf
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 %if %{_kernel24}
 Requires:	kernel > 2.4
 %else
 Requires:	kernel < 2.3
 %endif
-
-Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
-
 
 %description
 OpenVPN is a robust and highly configurable VPN (Virtual Private
@@ -60,7 +58,7 @@ internet.
 
 %configure \
 	--enable-pthread
-%{__make} #CFLAGS="%{rpmcflags}"
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
