@@ -13,6 +13,8 @@ BuildRequires:	automake
 BuildRequires:	autoconf
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.6
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
@@ -32,7 +34,7 @@ internet.
 %setup -q
 
 %build
-aclocal
+%{__aclocal}
 autoheader
 %{__autoconf}
 %{__automake}
@@ -55,7 +57,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add openvpn
-
 if [ -f /var/lock/subsys/openvpn ]; then
 	/etc/rc.d/init.d/openvpn restart 1>&2
 else
@@ -69,7 +70,6 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del openvpn
 fi    
-
 
 %files
 %defattr(644,root,root,755)
