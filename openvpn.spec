@@ -2,7 +2,7 @@
 # tun devices are handled in different way in 2.2. and 2.4 kernels.
 
 %define         _kernel_ver     %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define         _kernel24       %(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
+%define         _kernel24       %(echo %{_kernel_ver} | grep -qv '2\.4\.' ; echo $?)
 %if %{_kernel24}
 %define         _kernel_series  2.4
 %else
@@ -12,31 +12,29 @@
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
-Version:	1.5
-Release:	0.13.1@%{_kernel_series}
+Version:	1.5.0
+Release:	1@%{_kernel_series}
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}_beta13.tar.gz
-# Source0-md5:	a278f6da62938c8fd501e1c37fb61d40
+Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
+# Source0-md5:	55d7ce958bb2ccf3d3204d1350c27179
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
-#BuildRequires:	automake
-#BuildRequires:	autoconf
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.6k
 PreReq:		rc-scripts
-%if %{_kernel24}
-Requires:	kernel > 2.4
-%else
-Requires:	kernel < 2.3
-%endif
-
 Requires(post,preun):	/sbin/chkconfig
+%if %{_kernel24}
+%{!?_without_dist_kernel:Requires: kernel > 2.4}
+%else
+%{!?_without_dist_kernel:Requires: kernel < 2.3}
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
-
 
 %description
 OpenVPN is a robust and highly configurable VPN (Virtual Private
@@ -50,7 +48,7 @@ lub wiêcej prywatnych sieci u¿ywaj±c zaszyfrowanego tunelu poprzez
 internet.
 
 %prep
-%setup -q -n openvpn-1.5_beta13
+%setup -q
 
 %build
 %{__aclocal}
@@ -60,7 +58,7 @@ internet.
 
 %configure \
 	--enable-pthread
-%{__make} #CFLAGS="%{rpmcflags}"
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
