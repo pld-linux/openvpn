@@ -34,8 +34,9 @@ internet.
 %setup -q
 
 %build
+rm -f missing
 %{__aclocal}
-autoheader
+%{__autoheader}
 %{__autoconf}
 %{__automake}
 %configure 
