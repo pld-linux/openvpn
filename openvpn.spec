@@ -17,6 +17,7 @@ Release:	1@%{_kernel_series}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
+# Source0-md5:	a922a5af3ef66c552153ebdfadc8fc9f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
