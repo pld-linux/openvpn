@@ -100,7 +100,7 @@ case "$1" in
         else
                 msg_not_running OpenSSH
                 exit 1
- 		
+	fi 		
 	;;
   restart)
 	$0 stop
