@@ -11,8 +11,22 @@
 # Source function library
 . /etc/rc.d/init.d/functions
 
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down OpenVPN
+		exit 1
+	fi
+else
+	exit 0
+fi
+
 # Get service config
 [ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
+
 
 # See how we were called.
 case "$1" in
@@ -21,7 +35,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/openvpn ]; then
 		msg_starting "OpenVPN" ; started
 		if [ -z "$TUNNELS" ] ; then
-			nls "No tunnels configured in /etc/sysconfig/openvpn" ""
+			nls "No tunnels configured in /etc/sysconfig/openvpn"
 			exit 1
 		fi
 		ANYRETVAL=0
@@ -39,10 +53,10 @@ case "$1" in
 	fi
 	;;
   stop)
-	# Stop daemons.
 	if [ -f /var/lock/subsys/openvpn ]; then
+		# Stop daemons.
 		msg_stopping "OpenVPN"; started
-  		for pidfile in /var/run/openvpn/*.pid ; do
+		for pidfile in /var/run/openvpn/*.pid ; do
 			[ -f "$pidfile" ] || continue
 			pid=`cat "$pidfile"`
 			tun=`basename "$pidfile" | sed -e 's/\.pid$//'`
@@ -74,9 +88,19 @@ case "$1" in
 	status openvpn
 	;;
   reload)
-  	for pid in /var/run/openvpn/*.pid ; do
-		kill -HUP $pid
-	done
+	if [ -f /var/lock/subsys/openvpn ]; then
+		msg_reloading "OpenVPN"
+		busy
+		RETVAL=0
+		for pid in /var/run/openvpn/*.pid ; do
+			kill -HUP $pid
+			[ $RETVAL -eq 0 ] && RETVAL=$?
+		done
+		[ $RETVAL -eq 0 ] && ok || died
+        else
+                msg_not_running OpenSSH
+                exit 1
+ 		
 	;;
   restart)
 	$0 stop
