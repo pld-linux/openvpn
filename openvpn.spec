@@ -27,11 +27,6 @@ BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-%if %{_kernel22}
-%{!?_without_dist_kernel:Requires: kernel < 2.3}
-%else
-%{!?_without_dist_kernel:Requires: kernel > 2.4}
-%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
