@@ -2,7 +2,7 @@
 #
 # openvpn	Start/stop the VPN daemon.
 #
-# chkconfig:	2345 80 20
+# chkconfig:	2345 11 89
 #
 # description:	OpenVPN is a robust and highly configurable VPN (Virtual \
 #		Private Network) daemon
