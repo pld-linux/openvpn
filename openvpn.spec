@@ -12,17 +12,17 @@
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
-Version:	1.4.1
+Version:	1.4.2
 Release:	1@%{_kernel_series}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
-# Source0-md5:	a922a5af3ef66c552153ebdfadc8fc9f
+# Source0-md5:	9804fb402cc87a686ab2e82ce5e93e6d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
-BuildRequires:	automake
-BuildRequires:	autoconf
+#BuildRequires:	automake
+#BuildRequires:	autoconf
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7
 PreReq:		rc-scripts
@@ -53,11 +53,13 @@ internet.
 %setup -q
 
 %build
-rm -f missing
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
+#rm -f missing
+#%{__aclocal}
+#%{__autoheader}
+#%{__autoconf}
+# problem with malloc
+#%{__automake}
+
 %configure 
 %{__make} #CFLAGS="%{rpmcflags}"
 
