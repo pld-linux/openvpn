@@ -14,7 +14,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
-Conflicts:      kernel < 2.4
+Conflicts:	kernel < 2.4
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
