@@ -12,12 +12,12 @@
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
-Version:	1.4.2
+Version:	1.4.3
 Release:	1@%{_kernel_series}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}.tar.gz
-# Source0-md5:	9804fb402cc87a686ab2e82ce5e93e6d
+# Source0-md5:	a8623b94f2e507c9185b4ef0b329641a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://openvpn.sourceforge.net/
