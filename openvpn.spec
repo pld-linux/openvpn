@@ -1,19 +1,8 @@
-
-# tun devices are handled in different way in 2.2. and 2.4 kernels.
-
-%define         _kernel_ver     %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define         _kernel22       %(echo %{_kernel_ver} | grep -qv '2\.2\.' ; echo $?)
-%if %{_kernel22}
-%define         _kernel_series  2.2
-%else
-%define         _kernel_series  2.4
-%endif
-
 Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	1.6
-Release:	0.rc3.1@%{_kernel_series}
+Release:	0.rc3.2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/openvpn/%{name}-%{version}_rc3.tar.gz
@@ -25,6 +14,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7c
+Conflicts:      kernel < 2.4
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
