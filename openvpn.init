@@ -1,0 +1,93 @@
+#!/bin/sh
+#
+# openvpn       Start/stop the VPN daemon.
+#
+# chkconfig:	2345 80 20
+#
+# description:	OpenVPN is a robust and highly configurable VPN (Virtual
+#               Private Network) daemon
+#
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get service config
+[ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/openvpn ]; then
+		msg_starting "OpenVPN" ; started
+		if [ -z "$TUNNELS" ] ; then
+			nls "No tunnels configured in /etc/sysconfig/openvpn" ""
+			exit 1
+		fi
+		ANYRETVAL=0
+		for tun in $TUNNELS ; do
+			show "Starting OpenVPN tunnel %s" "$tun"
+			daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
+				--config "/etc/openvpn/$tun.conf" --cd /etc/openvpn
+			RETVAL=$?
+			[ $RETVAL -eq 0 ] || ANYRETVAL=$RETVAL
+		done
+		[ $ANYRETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
+	else
+		msg_Already_Running "OpenVPN"
+		exit 1
+	fi
+	;;
+  stop)
+        # Stop daemons.
+        if [ -f /var/lock/subsys/openvpn ]; then
+                msg_stopping "OpenVPN"; started
+  		for pidfile in /var/run/openvpn/*.pid ; do
+			[ -f "$pidfile" ] || continue
+			pid=`cat "$pidfile"`
+			tun=`basename "$pidfile" | sed -e 's/\.pid$//'`
+			show "Stopping OpenVPN tunnel %s" "$tun" ; busy
+			if ! ps h $pid >/dev/null 2>&1 ; then
+				died
+				continue
+			fi
+			kill -TERM $pid >/dev/null 2>&1 
+			usleep 100000
+			if ps h $pid >/dev/null 2>&1 ; then
+				sleep 1
+				if ps h $pid >/dev/null 2>&1 ; then
+					sleep 3
+					if ps h $pid >/dev/null 2>&1 ; then
+						kill -KILL $pid >/dev/null 2>&1
+					fi
+				fi
+			fi
+			ok
+		done
+                rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
+        else
+                msg_Not_Running "OpenVPN"
+                exit 1
+        fi
+																	
+	;;
+  status)
+	status openvpn
+	;;
+  reload)
+  	for pid in /var/run/openvpn/*.pid ; do
+		kill -HUP $pid
+	done
+	;;
+  restart)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  *)
+	msg_Usage: "$0 {start|stop|status|restart|reload}"
+	exit 1
+	;;
+esac
+
+exit $RETVAL
