@@ -29,19 +29,35 @@ fi
 
 [ -n "$2" ] && TUNNELS="$2"
 
+# check if all the tunnels are up
+tunlup() {
+	ret=0
+	for tun in $TUNNELS; do
+		pidfile=/var/run/openvpn/$tun.pid
+		pid=$(cat $pidfile 2>/dev/null)
+		kill -0 $pid 2>/dev/null && continue
+		ret=1
+	done
+	return $ret
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/openvpn ]; then
-		msg_starting "OpenVPN" ; started
+	if ! tunlup; then
+		msg_starting "OpenVPN"; started
 		if [ -z "$TUNNELS" ]; then
 			nls "No tunnels configured in /etc/sysconfig/openvpn"
 			exit 6
 		fi
-		for tun in $TUNNELS ; do
+		for tun in $TUNNELS; do
 			show "Starting OpenVPN tunnel %s" "$tun"
+			if TUNNELS=$tun tunlup; then
+				started
+				continue
+			fi
 			daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
 				--config "/etc/openvpn/$tun.conf" --cd /etc/openvpn
 			RET=$?
@@ -53,32 +69,15 @@ case "$1" in
 	fi
 	;;
   stop)
-	if [ -f /var/lock/subsys/openvpn ]; then
+	if tunlup; then
 		# Stop daemons.
 		msg_stopping "OpenVPN"; started
-		# FIXME: doesn't respect $TUNNELS
-		for pidfile in /var/run/openvpn/*.pid ; do
+		for tun in $TUNNELS; do
+			pidfile=/var/run/openvpn/$tun.pid
 			[ -f "$pidfile" ] || continue
 			pid=`cat "$pidfile"`
-			tun=`basename "$pidfile" | sed -e 's/\.pid$//'`
 			show "Stopping OpenVPN tunnel %s" "$tun" ; busy
-			if ! ps h $pid >/dev/null 2>&1 ; then
-				died
-				continue
-			fi
-			# FIXME: why not killproc? it has pidfile support!
-			kill -TERM $pid >/dev/null 2>&1
-			usleep 100000
-			if ps h $pid >/dev/null 2>&1 ; then
-				sleep 1
-				if ps h $pid >/dev/null 2>&1 ; then
-					sleep 3
-					if ps h $pid >/dev/null 2>&1 ; then
-						kill -KILL $pid >/dev/null 2>&1
-					fi
-				fi
-			fi
-			ok
+			killproc --pidfile openvpn/$tun.pid || err=1
 		done
 		rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
 	else
@@ -90,14 +89,13 @@ case "$1" in
 	exit $?
 	;;
   reload|force-reload)
-	if [ -f /var/lock/subsys/openvpn ]; then
-		msg_reloading "OpenVPN"
-		busy
-		for pid in /var/run/openvpn/*.pid ; do
-			kill -HUP $pid
+	if tunlup; then
+		msg_reloading "OpenVPN"; started
+		for tun in $TUNNELS; do
+			show "Reloading OpenVPN tunnel %s" "$tun"
+			killproc --pidfile openvpn/$tun.pid openvpn -USR1
 			[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
 		done
-		[ $RETVAL -eq 0 ] && ok || died
 	else
 		msg_not_running OpenVPN >&2
 		exit 7
