@@ -76,7 +76,7 @@ case "$1" in
 			pidfile=/var/run/openvpn/$tun.pid
 			[ -f "$pidfile" ] || continue
 			pid=`cat "$pidfile"`
-			show "Stopping OpenVPN tunnel %s" "$tun" ; busy
+			show "Stopping OpenVPN tunnel %s" "$tun"; busy
 			killproc --pidfile openvpn/$tun.pid || err=1
 		done
 		rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
