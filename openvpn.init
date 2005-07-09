@@ -93,7 +93,7 @@ case "$1" in
 		msg_reloading "OpenVPN"; started
 		for tun in $TUNNELS; do
 			show "Reloading OpenVPN tunnel %s" "$tun"
-			killproc --pidfile openvpn/$tun.pid openvpn -USR1
+			killproc --pidfile openvpn/$tun.pid openvpn -HUP
 			[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
 		done
 	else
