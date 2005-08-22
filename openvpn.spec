@@ -82,6 +82,6 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
-%attr(754,root,root) %config(noreplace) /etc/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man?/*
 %dir /var/run/openvpn
