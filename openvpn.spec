@@ -2,13 +2,14 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0.2
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
 # Source0-md5:	862f8788f080f669b1ae00a74ef68001
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Patch0:		%{name}-2.0_rc16MH.patch
 URL:		http://openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -34,6 +35,7 @@ internet.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__aclocal}
