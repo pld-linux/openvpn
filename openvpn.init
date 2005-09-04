@@ -45,13 +45,14 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
+	if [ -z "$TUNNELS" ]; then
+		nls "No tunnels configured in /etc/sysconfig/openvpn"
+		exit 6
+	fi
+
 	# Check if the service is already running?
 	if ! tunlup; then
 		msg_starting "OpenVPN"; started
-		if [ -z "$TUNNELS" ]; then
-			nls "No tunnels configured in /etc/sysconfig/openvpn"
-			exit 6
-		fi
 		for tun in $TUNNELS; do
 			show "Starting OpenVPN tunnel %s" "$tun"
 			if TUNNELS=$tun tunlup; then
