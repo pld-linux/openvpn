@@ -63,8 +63,8 @@ OpenVPN.
 	--enable-iproute2
 %{__make}
 
-%{__make} -C plugin/auth-pam
-%{__make} -C plugin/down-root
+%{__make} -C plugin/auth-pam OPTFLAGS="%{rpmcflags}"
+%{__make} -C plugin/down-root OPTFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
