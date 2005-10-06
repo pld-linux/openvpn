@@ -1,6 +1,6 @@
 # TODO
-# - RFC: currently plugins were installed to /usr/lib/openvpn/plugins,
-#   perhaps just /usr/lib as they're prefixed with openvpn-? pros from
+# - RFC: currently plugins were installed to /usr/%{_lib}/openvpn/plugins,
+#   perhaps just /usr/%{_lib} as they're prefixed with openvpn-? pros from
 #   this is that then you don't need to specify full path to plugins
 #   in openvpn.conf
 Summary:	VPN Daemon
@@ -40,12 +40,16 @@ lub wiêcej prywatnych sieci u¿ywaj±c zaszyfrowanego tunelu poprzez
 internet.
 
 %package devel
-Summary:	Development libraries and header files for OpenVPN
+Summary:	Header files for OpenVPN plugins development
+Summary(pl):	Pliki nag³ówkowe do tworzenia wtyczek OpenVPN
 Group:		Development/Libraries
 
 %description devel
-This is the package containing the development header files for
-OpenVPN.
+This is the package containing the header files for OpenVPN plugins
+development.
+
+%description devel -l pl
+Ten pakiet zawiera pliki nag³ówkowe do tworzenia wtyczek OpenVPN.
 
 %prep
 %setup -q
