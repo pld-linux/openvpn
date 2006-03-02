@@ -7,7 +7,7 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0.5
-Release:	2.7
+Release:	2.8
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
@@ -145,8 +145,8 @@ fi
 %doc easy-rsa/2.0/README
 %dir %{_sysconfdir}/easy-rsa
 %dir %attr(700,root,root) %{_sysconfdir}/easy-rsa/keys
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/easy-rsa/vars
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/easy-rsa/openssl.cnf
+%config(noreplace) %attr(640,root,root) %verify(not md5 mtime size) %{_sysconfdir}/easy-rsa/vars
+%config(noreplace) %attr(640,root,root) %verify(not md5 mtime size) %{_sysconfdir}/easy-rsa/openssl.cnf
 %attr(755,root,root) %{_sbindir}/pkitool
 %dir %{_datadir}/easy-rsa
 %attr(755,root,root) %{_datadir}/easy-rsa/*
