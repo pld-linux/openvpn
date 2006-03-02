@@ -7,7 +7,7 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0.5
-Release:	2
+Release:	2.7
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
@@ -16,14 +16,16 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-2.0_rc16MH.patch
 Patch1:		%{name}-optflags.patch
+Patch2:		easy-rsa2.patch
 URL:		http://openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
-Conflicts:	kernel < 2.4
-Requires:	rc-scripts >= 0.4.0.19
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts >= 0.4.0.19
+Conflicts:	kernel < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
@@ -51,10 +53,27 @@ development.
 %description devel -l pl
 Ten pakiet zawiera pliki nag³ówkowe do tworzenia wtyczek OpenVPN.
 
+%package -n easy-rsa
+Summary:	Small RSA key management package
+Version:	2.0
+Group:		Applications/Communications
+Requires:	openssl-tools
+Requires:	/bin/bash
+Requires:	grep
+
+%description -n easy-rsa
+This is a small RSA key management package, based on the openssl
+command line tool, that can be found in the easy-rsa subdirectory of
+the OpenVPN distribution.
+
+For step-by-step instructions, see the HOWTO:
+<http://openvpn.net/howto.html>.
+
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__aclocal}
@@ -83,31 +102,32 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install openvpn-plugin.h $RPM_BUILD_ROOT%{_includedir}
 install plugin/{auth-pam,down-root}/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins
 
+# easy-rsa 2.0
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_datadir}}/easy-rsa
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa/keys
+cp -a easy-rsa/2.0/{vars,openssl.cnf} $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa
+cp -a easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,revoke-full,sign-req} $RPM_BUILD_ROOT%{_datadir}/easy-rsa
+cp -a easy-rsa/2.0/pkitool $RPM_BUILD_ROOT%{_sbindir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add openvpn
-if [ -f /var/lock/subsys/openvpn ]; then
-	/etc/rc.d/init.d/openvpn restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/openvpn start\" to start OpenVPN" 1>&2
-fi
+%service openvpn restart "OpenVPN"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/openvpn ]; then
-		/etc/rc.d/init.d/openvpn stop 1>&2
-	fi
+	%service openvpn stop
 	/sbin/chkconfig --del openvpn
 fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README ChangeLog sample-config-files sample-keys easy-rsa sample-scripts
+%doc AUTHORS README ChangeLog sample-config-files sample-keys sample-scripts
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/openvpn
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
@@ -119,3 +139,14 @@ fi
 %defattr(644,root,root,755)
 %doc plugin/{README,examples/}
 %{_includedir}/*.h
+
+%files -n easy-rsa
+%defattr(644,root,root,755)
+%doc easy-rsa/2.0/README
+%dir %{_sysconfdir}/easy-rsa
+%dir %attr(700,root,root) %{_sysconfdir}/easy-rsa/keys
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/easy-rsa/vars
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/easy-rsa/openssl.cnf
+%attr(755,root,root) %{_sbindir}/pkitool
+%dir %{_datadir}/easy-rsa
+%attr(755,root,root) %{_datadir}/easy-rsa/*
