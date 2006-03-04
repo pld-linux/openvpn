@@ -55,11 +55,12 @@ Ten pakiet zawiera pliki nag³ówkowe do tworzenia wtyczek OpenVPN.
 
 %package -n easy-rsa
 Summary:	Small RSA key management package
+Summary(pl):	Ma³y pakiet do zarz±dzania kluczami RSA
 Version:	2.0
 Group:		Applications/Communications
+Requires:	grep
 Requires:	openssl-tools
 Requires:	/bin/bash
-Requires:	grep
 
 %description -n easy-rsa
 This is a small RSA key management package, based on the openssl
@@ -67,6 +68,14 @@ command line tool, that can be found in the easy-rsa subdirectory of
 the OpenVPN distribution.
 
 For step-by-step instructions, see the HOWTO:
+<http://openvpn.net/howto.html>.
+
+%description -n easy-rsa -l pl
+To jest ma³y pakiet do zarz±dzania kluczami RSA, oparty na narzêdziu
+linii poleceñ openssl. Pakiet ten pochodzi z podkatalogu easy-rsa
+dystrybucji OpenVPN.
+
+Instrukcje krok po kroku mo¿na znale¼æ w HOWTO:
 <http://openvpn.net/howto.html>.
 
 %prep
@@ -86,8 +95,10 @@ For step-by-step instructions, see the HOWTO:
 	--enable-iproute2
 %{__make}
 
-%{__make} -C plugin/auth-pam OPTFLAGS="%{rpmcflags}"
-%{__make} -C plugin/down-root OPTFLAGS="%{rpmcflags}"
+%{__make} -C plugin/auth-pam \
+	OPTFLAGS="%{rpmcflags}"
+%{__make} -C plugin/down-root \
+	OPTFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
