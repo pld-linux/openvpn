@@ -7,7 +7,7 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0.5
-Release:	3
+Release:	4
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
@@ -24,6 +24,7 @@ BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
+Requires:	iproute2
 Requires:	rc-scripts >= 0.4.0.19
 Conflicts:	kernel < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -58,9 +59,9 @@ Summary:	Small RSA key management package
 Summary(pl):	Ma³y pakiet do zarz±dzania kluczami RSA
 Version:	2.0
 Group:		Applications/Communications
+Requires:	/bin/bash
 Requires:	grep
 Requires:	openssl-tools
-Requires:	/bin/bash
 
 %description -n easy-rsa
 This is a small RSA key management package, based on the openssl
