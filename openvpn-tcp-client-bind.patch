@@ -1,0 +1,12 @@
+--- openvpn-2.0.6/socket.c.wiget	2006-05-05 15:32:12.000000000 +0200
++++ openvpn-2.0.6/socket.c	2006-05-05 15:33:48.000000000 +0200
+@@ -1028,7 +1028,8 @@
+     }
+   else if (sock->info.proto == PROTO_TCPv4_CLIENT)
+     {
+-      sock->bind_local = false;
++      if (!(sock->local_host))
++    sock->bind_local = false;
+     }
+ 
+   /* were we started by inetd or xinetd? */
