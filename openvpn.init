@@ -98,7 +98,7 @@ case "$1" in
 			[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
 		done
 	else
-		msg_not_running OpenVPN >&2
+		msg_not_running OpenVPN
 		exit 7
 	fi
 	;;
