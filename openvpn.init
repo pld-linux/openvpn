@@ -29,13 +29,20 @@ fi
 
 [ -n "$2" ] && TUNNELS="$2"
 
-# check if all the tunnels are up
+# check if all the tunnel $1 is up
 tunlup() {
+	local tun="$1"
+	local pidfile=/var/run/openvpn/$tun.pid
+	local pid=$(cat $pidfile 2>/dev/null)
+	kill -0 $pid 2>/dev/null
+	return $?
+}
+
+# check if all the tunnels are up
+tunlsup() {
 	ret=0
 	for tun in $TUNNELS; do
-		pidfile=/var/run/openvpn/$tun.pid
-		pid=$(cat $pidfile 2>/dev/null)
-		kill -0 $pid 2>/dev/null && continue
+		tulnup $tun && continue
 		ret=1
 	done
 	return $ret
@@ -51,11 +58,11 @@ case "$1" in
 	fi
 
 	# Check if the service is already running?
-	if ! tunlup; then
+	if ! tunslup; then
 		msg_starting "OpenVPN"; started
 		for tun in $TUNNELS; do
 			show "Starting OpenVPN tunnel %s" "$tun"
-			if TUNNELS=$tun tunlup; then
+			if tunlup $tun; then
 				started
 				continue
 			fi
@@ -70,7 +77,7 @@ case "$1" in
 	fi
 	;;
   stop)
-	if tunlup; then
+	if tunslup; then
 		# Stop daemons.
 		msg_stopping "OpenVPN"; started
 		for tun in $TUNNELS; do
@@ -86,11 +93,18 @@ case "$1" in
 	fi
 	;;
   status)
+	nls "Configured tunnels:"
+   	echo " $TUNNELS"
+	nls "Currently active tunnels:"
+	for tun in $TUNNELS; do
+		tunlup $tun && echo -n " $tun($(cat /var/run/openvpn/$tun.pid))"
+	done
+	echo ""
 	status openvpn
 	exit $?
 	;;
   reload|force-reload)
-	if tunlup; then
+	if tunslup; then
 		msg_reloading "OpenVPN"; started
 		for tun in $TUNNELS; do
 			show "Reloading OpenVPN tunnel %s" "$tun"
