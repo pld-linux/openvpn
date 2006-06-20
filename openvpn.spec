@@ -7,7 +7,7 @@ Summary:	VPN Daemon
 Summary(pl):	Serwer VPN
 Name:		openvpn
 Version:	2.0.7
-Release:	1
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
@@ -61,7 +61,6 @@ Summary:	Small RSA key management package
 Summary(pl):	Ma³y pakiet do zarz±dzania kluczami RSA
 Version:	2.0
 Group:		Applications/Communications
-Requires:	/bin/bash
 Requires:	grep
 Requires:	openssl-tools
 
