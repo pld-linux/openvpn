@@ -1,7 +1,10 @@
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-ca	2005-11-02 20:42:38.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-ca	2006-03-02 16:34:06.000000000 +0200
-@@ -4,5 +4,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-ca	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-ca	2006-06-20 18:07:58.836973652 +0300
+@@ -1,8 +1,8 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ #
  # Build a root certificate
  #
  
@@ -9,10 +12,11 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --initca $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --initca $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-dh	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-dh	2006-03-02 16:34:06.000000000 +0200
-@@ -2,6 +2,9 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-dh	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-dh	2006-06-20 18:08:01.257028006 +0300
+@@ -1,7 +1,10 @@
+-#!/bin/bash
++#!/bin/sh
  
  # Build Diffie-Hellman parameters for the server side
  # of an SSL/TLS connection.
@@ -22,10 +26,12 @@ unchanged:
  
  if [ -d $KEY_DIR ] && [ $KEY_SIZE ]; then
      openssl dhparam -out ${KEY_DIR}/dh${KEY_SIZE}.pem ${KEY_SIZE}
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-inter	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-inter	2006-03-02 16:34:06.000000000 +0200
-@@ -3,5 +3,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-inter	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-inter	2006-06-20 18:08:03.467077642 +0300
+@@ -1,7 +1,7 @@
+-#!/bin/bash
++#!/bin/sh
+ 
  # Make an intermediate CA certificate/private key pair using a locally generated
  # root certificate.
  
@@ -33,10 +39,12 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --inter $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --inter $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-key	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-key	2006-03-02 16:34:06.000000000 +0200
-@@ -3,5 +3,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-key	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-key	2006-06-20 18:07:54.086866966 +0300
+@@ -1,7 +1,7 @@
+-#!/bin/bash
++#!/bin/sh
+ 
  # Make a certificate/private key pair using a locally generated
  # root certificate.
  
@@ -44,10 +52,12 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-key-pass	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-key-pass	2006-03-02 16:34:06.000000000 +0200
-@@ -3,5 +3,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-key-pass	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-key-pass	2006-06-20 18:07:44.566653144 +0300
+@@ -1,7 +1,7 @@
+-#!/bin/bash
++#!/bin/sh
+ 
  # Similar to build-key, but protect the private key
  # with a password.
  
@@ -55,10 +65,13 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --pass $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --pass $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-key-pkcs12	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-key-pkcs12	2006-03-02 16:34:06.000000000 +0200
-@@ -4,5 +4,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-key-pkcs12	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-key-pkcs12	2006-06-20 18:07:40.856569816 +0300
+@@ -1,8 +1,8 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # Make a certificate/private key pair using a locally generated
  # root certificate and convert it to a PKCS #12 file including the
  # the CA certificate as well.
  
@@ -66,21 +79,25 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --pkcs12 $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --pkcs12 $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-key-server	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-key-server	2006-03-02 16:34:06.000000000 +0200
-@@ -6,5 +6,5 @@
- # Explicitly set nsCertType to server using the "server"
- # extension in the openssl.cnf file.
+--- openvpn-2.0.5/easy-rsa/2.0/build-key-server	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-key-server	2006-06-20 18:07:42.576608448 +0300
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
  
+ # Make a certificate/private key pair using a locally generated
+ # root certificate.
+@@ -9,2 +9,2 @@
 -export EASY_RSA="${EASY_RSA:-.}"
 -"$EASY_RSA/pkitool" --interact --server $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --server $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-req	2005-11-02 20:42:38.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-req	2006-03-02 16:34:06.000000000 +0200
-@@ -3,5 +3,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-req	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-req	2006-06-20 18:07:57.116935021 +0300
+@@ -1,7 +1,7 @@
+-#!/bin/bash
++#!/bin/sh
+ 
  # Build a certificate signing request and private key.  Use this
  # when your root certificate and key is not available locally.
  
@@ -88,10 +105,12 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --csr $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --csr $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/build-req-pass	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/build-req-pass	2006-03-02 16:34:06.000000000 +0200
-@@ -3,5 +3,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/build-req-pass	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/build-req-pass	2006-06-20 18:07:48.716746354 +0300
+@@ -1,7 +1,7 @@
+-#!/bin/bash
++#!/bin/sh
+ 
  # Like build-req, but protect your private key
  # with a password.
  
@@ -99,10 +118,13 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --csr --pass $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --csr --pass $*
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/clean-all	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/clean-all	2006-03-02 16:34:06.000000000 +0200
-@@ -4,6 +4,10 @@
+--- openvpn-2.0.5/easy-rsa/2.0/clean-all	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/clean-all	2006-06-20 18:07:35.556450775 +0300
+@@ -1,9 +1,13 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # Initialize the $KEY_DIR directory.
  # Note that this script does a
  # rm -rf on $KEY_DIR so be careful!
  
@@ -113,9 +135,14 @@ unchanged:
  if [ "$KEY_DIR" ]; then
      rm -rf "$KEY_DIR"
      mkdir "$KEY_DIR" && \
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/inherit-inter	2005-11-02 20:42:38.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/inherit-inter	2006-03-02 16:34:06.000000000 +0200
+--- openvpn-2.0.5/easy-rsa/2.0/inherit-inter	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/inherit-inter	2006-06-20 18:07:51.916818227 +0300
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # Build a new PKI which is rooted on an intermediate certificate generated
+ # by ./build-inter or ./pkitool --inter from a parent PKI.  The new PKI should
 @@ -9,6 +9,10 @@
  # To build an intermediate CA, follow the same steps for a regular PKI but
  # replace ./build-key or ./pkitool --initca with this script.
@@ -127,11 +154,11 @@ unchanged:
  # The EXPORT_CA file will contain the CA certificate chain and should be
  # referenced by the OpenVPN "ca" directive in config files.  The ca.crt file
  # will only contain the local intermediate CA -- it's needed by the easy-rsa
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/list-crl	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/list-crl	2006-03-02 16:34:06.000000000 +0200
+--- openvpn-2.0.5/easy-rsa/2.0/list-crl	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/list-crl	2006-06-20 18:07:29.446313541 +0300
 @@ -1,6 +1,9 @@
- #!/bin/bash
+-#!/bin/bash
++#!/bin/sh
  
  # list revoked certificates
 +if [ -z "$EASY_RSA" ]; then
@@ -140,7 +167,6 @@ unchanged:
  
  CRL="${1:-crl.pem}"
  
-unchanged:
 --- openvpn-2.0.5/easy-rsa/2.0.orig/pkitool	2005-11-02 20:42:38.000000000 +0200
 +++ openvpn-2.0.5/easy-rsa/2.0/pkitool	2006-03-02 16:34:06.000000000 +0200
 @@ -34,6 +34,10 @@
@@ -154,10 +180,12 @@ unchanged:
  need_vars()
  {
      echo '  Please edit the vars script to reflect your configuration,'
-unchanged:
---- openvpn-2.0.5/easy-rsa/2.0.orig/sign-req	2005-11-02 20:42:39.000000000 +0200
-+++ openvpn-2.0.5/easy-rsa/2.0/sign-req	2006-03-02 16:34:06.000000000 +0200
-@@ -3,5 +3,5 @@
+--- openvpn-2.0.5/easy-rsa/2.0/sign-req	2006-03-02 16:34:06.000000000 +0200
++++ openvpn-2.0.7-bash/easy-rsa/2.0/sign-req	2006-06-20 18:07:38.856524895 +0300
+@@ -1,7 +1,7 @@
+-#!/bin/bash
++#!/bin/sh
+ 
  # Sign a certificate signing request (a .csr file)
  # with a local root certificate and key.
  
@@ -165,7 +193,6 @@ unchanged:
 -"$EASY_RSA/pkitool" --interact --sign $*
 +export EASY_RSA="${EASY_RSA:-/etc/easy-rsa}"
 +/usr/sbin/pkitool --interact --sign $*
-unchanged:
 --- openvpn-2.0.5/easy-rsa/2.0.orig/vars	2005-11-02 20:42:39.000000000 +0200
 +++ openvpn-2.0.5/easy-rsa/2.0/vars	2006-03-02 16:34:06.000000000 +0200
 @@ -12,7 +12,7 @@
@@ -187,8 +214,6 @@ unchanged:
  # Increase this to 2048 if you
  # are paranoid.  This will slow
  # down TLS negotiation performance
-only in patch2:
-unchanged:
 --- openvpn-2.0.5/easy-rsa/2.0/revoke-full	2005-11-02 20:42:39.000000000 +0200
 +++ /home/glen/revoke-full	2006-03-22 13:58:57.000000000 +0200
 @@ -2,6 +2,9 @@
@@ -219,3 +244,11 @@ unchanged:
  else
      echo 'Please source the vars script first (i.e. "source ./vars")'
      echo 'Make sure you have edited it to reflect your configuration.'
+--- openvpn-2.0.7/easy-rsa/2.0/revoke-full	2006-06-20 18:08:19.667441494 +0300
++++ openvpn-2.0.7-bash/easy-rsa/2.0/revoke-full	2006-06-20 18:07:46.746702107 +0300
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # revoke a certificate, regenerate CRL,
+ # and verify revocation
