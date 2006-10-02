@@ -48,10 +48,7 @@ tunlsup() {
 	return $ret
 }
 
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	if [ -z "$TUNNELS" ]; then
 		nls "No tunnels configured in /etc/sysconfig/openvpn"
 		exit 6
@@ -75,8 +72,9 @@ case "$1" in
 	else
 		msg_already_running "OpenVPN"
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	if tunlsup; then
 		# Stop daemons.
 		msg_stopping "OpenVPN"; started
@@ -91,17 +89,16 @@ case "$1" in
 	else
 		msg_not_running "OpenVPN"
 	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
 	;;
-  status)
-	nls "Configured tunnels:"
-   	echo " $TUNNELS"
-	nls "Currently active tunnels:"
-	for tun in $TUNNELS; do
-		tunlup $tun && echo -n " $tun($(cat /var/run/openvpn/$tun.pid))"
-	done
-	echo ""
-	status openvpn
-	exit $?
+  stop)
+  	stop
 	;;
   reload|force-reload)
 	if tunlsup; then
@@ -117,9 +114,20 @@ case "$1" in
 	fi
 	;;
   restart)
-	$0 stop "$TUNNELS"
+	stop
 	sleep 1
-	$0 start "$TUNNELS"
+	start
+	exit $?
+	;;
+  status)
+	nls "Configured tunnels:"
+   	echo " $TUNNELS"
+	nls "Currently active tunnels:"
+	for tun in $TUNNELS; do
+		tunlup $tun && echo -n " $tun($(cat /var/run/openvpn/$tun.pid))"
+	done
+	echo ""
+	status openvpn
 	exit $?
 	;;
   *)
