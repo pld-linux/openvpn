@@ -127,7 +127,7 @@ case "$1" in
 		[ -f "$pidfile" ] || continue
 		tun=${pidfile#/var/run/openvpn/}
 		tun=${tun%.pid}
-		tunlup $tun && echo -n " $tun($(cat /var/run/openvpn/$tun.pid))"
+		tunlup $tun && echo -n " $tun($(cat $pidfile))"
 	done
 	echo ""
 	tunlsup
