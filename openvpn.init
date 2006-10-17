@@ -38,7 +38,7 @@ tunlup() {
 	return $?
 }
 
-# check if all the tunnels are up
+# check if all the configured tunnels are up
 tunlsup() {
 	ret=0
 	for tun in $TUNNELS; do
@@ -123,11 +123,14 @@ case "$1" in
 	nls "Configured tunnels:"
    	echo " $TUNNELS"
 	nls "Currently active tunnels:"
-	for tun in $TUNNELS; do
+	for pidfile in /var/run/openvpn/*.pid; do
+		[ -f "$pidfile" ] || continue
+		tun=${pidfile#/var/run/openvpn/}
+		tun=${tun%.pid}
 		tunlup $tun && echo -n " $tun($(cat /var/run/openvpn/$tun.pid))"
 	done
 	echo ""
-	status openvpn
+	tunlsup
 	exit $?
 	;;
   *)
