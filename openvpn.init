@@ -120,6 +120,7 @@ case "$1" in
 	exit $?
 	;;
   status)
+  	status openvpn
 	nls "Configured tunnels:"
    	echo " $TUNNELS"
 	nls "Currently active tunnels:"
