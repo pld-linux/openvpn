@@ -252,3 +252,14 @@
  else
      echo 'Please source the vars script first (i.e. "source ./vars")'
      echo 'Make sure you have edited it to reflect your configuration.'
+--- openvpn-2.0.9/easy-rsa/2.0/vars~	2006-12-07 20:33:11.688972229 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/vars	2006-12-07 20:33:13.999024320 +0200
+@@ -26,7 +26,7 @@
+ # This variable should point to
+ # the openssl.cnf file included
+ # with easy-rsa.
+-export KEY_CONFIG=`$EASY_RSA/whichopensslcnf $EASY_RSA`
++export KEY_CONFIG="$EASY_RSA/openssl.cnf"
+ 
+ # Edit this variable to point to
+ # your soon-to-be-created key
