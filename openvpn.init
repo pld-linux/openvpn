@@ -8,6 +8,20 @@
 #		Private Network) daemon
 #
 
+# Get service config
+[ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
+
+[ -n "$2" ] && TUNNELS="$2"
+
+# no tunnels. exit silently
+if [ -z "$TUNNELS" ]; then
+   	case "$1" in
+	start|stop|restart|reload|force-reload)
+		exit 0
+		;;
+	esac
+fi
+
 # Source function library
 . /etc/rc.d/init.d/functions
 
@@ -23,11 +37,6 @@ if is_yes "${NETWORKING}"; then
 else
 	exit 0
 fi
-
-# Get service config
-[ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
-
-[ -n "$2" ] && TUNNELS="$2"
 
 # check if all the tunnel $1 is up
 tunlup() {
@@ -49,11 +58,6 @@ tunlsup() {
 }
 
 start() {
-	if [ -z "$TUNNELS" ]; then
-		nls "No tunnels configured in /etc/sysconfig/openvpn"
-		exit 6
-	fi
-
 	# Check if the service is already running?
 	if ! tunlsup; then
 		msg_starting "OpenVPN"; started
