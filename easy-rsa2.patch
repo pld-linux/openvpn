@@ -226,29 +226,29 @@
  
  CRL="crl.pem"
  RT="revoke-test.pem"
-@@ -20,7 +23,7 @@
-     export KEY_OU=""
- 
-     # revoke key and generate a new CRL
--    openssl ca -revoke "$1.crt" -config "$KEY_CONFIG"
-+    openssl ca -revoke "$1" -config "$KEY_CONFIG"
- 
-     # generate a new CRL -- try to be compatible with
-     # intermediate PKIs
-@@ -32,7 +35,7 @@
-     fi
-     
-     # verify the revocation
--    openssl verify -CAfile "$RT" -crl_check "$1.crt"
-+    openssl verify -CAfile "$RT" -crl_check "$1"
- else
-     echo 'Please source the vars script first (i.e. "source ./vars")'
-     echo 'Make sure you have edited it to reflect your configuration.'
---- openvpn-2.0.7/easy-rsa/2.0/revoke-full	2006-06-20 18:08:19.667441494 +0300
-+++ openvpn-2.0.7-bash/easy-rsa/2.0/revoke-full	2006-06-20 18:07:46.746702107 +0300
+--- openvpn-2.0.7-bash/easy-rsa/2.0/revoke-full	2006-06-20 18:07:46.746702107 +0300
++++ openvpn-2.0.9/easy-rsa/2.0/revoke-full	2006-12-07 20:29:18.323709601 +0200
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/bin/sh
  
  # revoke a certificate, regenerate CRL,
  # and verify revocation
+@@ -23,7 +23,7 @@
+     export KEY_OU=""
+ 
+     # revoke key and generate a new CRL
+-    $OPENSSL ca -revoke "$1.crt" -config "$KEY_CONFIG"
++    $OPENSSL ca -revoke "$1" -config "$KEY_CONFIG"
+ 
+     # generate a new CRL -- try to be compatible with
+     # intermediate PKIs
+@@ -35,7 +35,7 @@
+     fi
+     
+     # verify the revocation
+-    $OPENSSL verify -CAfile "$RT" -crl_check "$1.crt"
++    $OPENSSL verify -CAfile "$RT" -crl_check "$1"
+ else
+     echo 'Please source the vars script first (i.e. "source ./vars")'
+     echo 'Make sure you have edited it to reflect your configuration.'
