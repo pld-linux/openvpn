@@ -62,14 +62,22 @@ start() {
 	if ! tunlsup; then
 		msg_starting "OpenVPN"; started
 		for tun in $TUNNELS; do
-			show "Starting OpenVPN tunnel %s" "$tun"
-			if tunlup $tun; then
-				started
-				continue
+			config="/etc/openvpn/$tun.conf"
+			if [ ! -f "$config" ]; then
+				nls "Invalid tunnel \`%s': missing config: %s" $tun "$config"
+				fail
+				RET=1
+			else
+				show "Starting OpenVPN tunnel %s" "$tun"
+				if tunlup $tun; then
+					started
+					continue
+				fi
+
+				daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
+					--config $config --cd /etc/openvpn
+				RET=$?
 			fi
-			daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
-				--config "/etc/openvpn/$tun.conf" --cd /etc/openvpn
-			RET=$?
 			[ $RETVAL -eq 0 ] && RETVAL=$RET
 		done
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
