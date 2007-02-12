@@ -4,7 +4,7 @@
 #   this is that then you don't need to specify full path to plugins
 #   in openvpn.conf
 Summary:	VPN Daemon
-Summary(pl):	Serwer VPN
+Summary(pl.UTF-8):   Serwer VPN
 Name:		openvpn
 Version:	2.0.9
 Release:	2
@@ -38,27 +38,27 @@ OpenVPN is a robust and highly configurable VPN (Virtual Private
 Network) daemon which can be used to securely link two or more private
 networks using an encrypted tunnel over the internet.
 
-%description -l pl
+%description -l pl.UTF-8
 OpenVPN jest mocnym i silnie konfigurowalnym serwerem VPN (Wirtualne
-Sieci Prywatne), który mo¿e byæ u¿yty do bezpiecznego ³±czenia dwóch
-lub wiêcej prywatnych sieci u¿ywaj±c zaszyfrowanego tunelu poprzez
+Sieci Prywatne), ktÃ³ry moÅ¼e byÄ‡ uÅ¼yty do bezpiecznego Å‚Ä…czenia dwÃ³ch
+lub wiÄ™cej prywatnych sieci uÅ¼ywajÄ…c zaszyfrowanego tunelu poprzez
 internet.
 
 %package devel
 Summary:	Header files for OpenVPN plugins development
-Summary(pl):	Pliki nag³ówkowe do tworzenia wtyczek OpenVPN
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe do tworzenia wtyczek OpenVPN
 Group:		Development/Libraries
 
 %description devel
 This is the package containing the header files for OpenVPN plugins
 development.
 
-%description devel -l pl
-Ten pakiet zawiera pliki nag³ówkowe do tworzenia wtyczek OpenVPN.
+%description devel -l pl.UTF-8
+Ten pakiet zawiera pliki nagÅ‚Ã³wkowe do tworzenia wtyczek OpenVPN.
 
 %package -n easy-rsa
 Summary:	Small RSA key management package
-Summary(pl):	Ma³y pakiet do zarz±dzania kluczami RSA
+Summary(pl.UTF-8):   MaÅ‚y pakiet do zarzÄ…dzania kluczami RSA
 Version:	2.0
 Group:		Applications/Communications
 Requires:	grep
@@ -72,12 +72,12 @@ the OpenVPN distribution.
 For step-by-step instructions, see the HOWTO:
 <http://openvpn.net/howto.html>.
 
-%description -n easy-rsa -l pl
-To jest ma³y pakiet do zarz±dzania kluczami RSA, oparty na narzêdziu
-linii poleceñ openssl. Pakiet ten pochodzi z podkatalogu easy-rsa
+%description -n easy-rsa -l pl.UTF-8
+To jest maÅ‚y pakiet do zarzÄ…dzania kluczami RSA, oparty na narzÄ™dziu
+linii poleceÅ„ openssl. Pakiet ten pochodzi z podkatalogu easy-rsa
 dystrybucji OpenVPN.
 
-Instrukcje krok po kroku mo¿na znale¼æ w HOWTO:
+Instrukcje krok po kroku moÅ¼na znaleÅºÄ‡ w HOWTO:
 <http://openvpn.net/howto.html>.
 
 %prep
