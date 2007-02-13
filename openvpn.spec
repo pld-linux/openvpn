@@ -4,7 +4,7 @@
 #   this is that then you don't need to specify full path to plugins
 #   in openvpn.conf
 Summary:	VPN Daemon
-Summary(pl.UTF-8):   Serwer VPN
+Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.0.9
 Release:	2
@@ -46,7 +46,7 @@ internet.
 
 %package devel
 Summary:	Header files for OpenVPN plugins development
-Summary(pl.UTF-8):   Pliki nagłówkowe do tworzenia wtyczek OpenVPN
+Summary(pl.UTF-8):	Pliki nagłówkowe do tworzenia wtyczek OpenVPN
 Group:		Development/Libraries
 
 %description devel
@@ -58,7 +58,7 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 
 %package -n easy-rsa
 Summary:	Small RSA key management package
-Summary(pl.UTF-8):   Mały pakiet do zarządzania kluczami RSA
+Summary(pl.UTF-8):	Mały pakiet do zarządzania kluczami RSA
 Version:	2.0
 Group:		Applications/Communications
 Requires:	grep
