@@ -7,7 +7,7 @@ Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.0.9
-Release:	3
+Release:	4
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
@@ -59,8 +59,7 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 %package -n easy-rsa
 Summary:	Small RSA key management package
 Summary(pl.UTF-8):	Mały pakiet do zarządzania kluczami RSA
-Version:	2.0
-Group:		Applications/Communications
+Group:		Applications
 Requires:	grep
 Requires:	openssl-tools
 
