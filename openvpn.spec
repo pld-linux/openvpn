@@ -1,23 +1,17 @@
-# TODO
-# - RFC: currently plugins were installed to /usr/%{_lib}/openvpn/plugins,
-#   perhaps just /usr/%{_lib} as they're prefixed with openvpn-? pros from
-#   this is that then you don't need to specify full path to plugins
-#   in openvpn.conf
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.0.9
-Release:	4
+%define	snap	rc2
+Version:	2.1
+Release:	0.%{snap}.1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://openvpn.net/release/%{name}-%{version}.tar.gz
-# Source0-md5:	60745008b90b7dbe25fe8337c550fec6
+Source0:	http://openvpn.net/release/%{name}-%{version}_%{snap}.tar.gz
+# Source0-md5:	853c81d2de51d85b5381d4c7f7f074e3
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-2.0_rc16MH.patch
-Patch1:		%{name}-optflags.patch
-Patch2:		easy-rsa2.patch
-Patch3:		%{name}-tcp-client-bind.patch
+Patch0:		%{name}-optflags.patch
+Patch1:		easy-rsa2.patch
 URL:		http://openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -80,11 +74,9 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 <http://openvpn.net/howto.html>.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}_%{snap}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
 %{__aclocal}
@@ -93,6 +85,7 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 %{__automake}
 
 %configure \
+	--enable-password-save \
 	--enable-pthread \
 	--enable-iproute2
 %{__make}
@@ -122,6 +115,10 @@ cp -a easy-rsa/2.0/{vars,openssl.cnf} $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa
 cp -a easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,revoke-full,sign-req} $RPM_BUILD_ROOT%{_datadir}/easy-rsa
 cp -a easy-rsa/2.0/pkitool $RPM_BUILD_ROOT%{_sbindir}
 
+#
+cp -f plugin/auth-pam/README README.auth-pam
+cp -f plugin/down-root/README README.down-root
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -137,7 +134,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README ChangeLog sample-config-files sample-keys sample-scripts
+%doc AUTHORS README* ChangeLog sample-config-files sample-keys sample-scripts
+%doc management/management-notes.txt
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
