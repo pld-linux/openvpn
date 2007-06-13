@@ -1,13 +1,13 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-%define	snap	rc2
+%define	snap	rc4
 Version:	2.1
 Release:	0.%{snap}.1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}_%{snap}.tar.gz
-# Source0-md5:	853c81d2de51d85b5381d4c7f7f074e3
+# Source0-md5:	9fffc0aa0f797b612fa4f52b1e92197b
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-optflags.patch
