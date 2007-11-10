@@ -1,5 +1,5 @@
 %define		snap	rc4
-%define		_rel	2
+%define		_rel	3
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
@@ -79,6 +79,9 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 %patch0 -p1
 %patch1 -p1
 
+mv plugin/auth-pam/README README.auth-pam
+mv plugin/down-root/README README.down-root
+
 %build
 %{__aclocal}
 %{__autoheader}
@@ -116,9 +119,9 @@ cp -a easy-rsa/2.0/{vars,openssl.cnf} $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa
 cp -a easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,revoke-full,sign-req} $RPM_BUILD_ROOT%{_datadir}/easy-rsa
 cp -a easy-rsa/2.0/pkitool $RPM_BUILD_ROOT%{_sbindir}
 
-#
-cp -f plugin/auth-pam/README README.auth-pam
-cp -f plugin/down-root/README README.down-root
+# we use cp -a, not to pull /bin/bash dependency
+cp -a contrib/pull-resolv-conf/client.down $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a contrib/pull-resolv-conf/client.up $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -142,6 +145,8 @@ fi
 %attr(755,root,root) %{_sbindir}/openvpn
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_libdir}/%{name}
+%attr(755,root,root) %{_libdir}/%{name}/client.down
+%attr(755,root,root) %{_libdir}/%{name}/client.up
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %{_mandir}/man?/*
