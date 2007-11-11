@@ -1,5 +1,5 @@
 %define		snap	rc4
-%define		_rel	3
+%define		_rel	4
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
