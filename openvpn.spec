@@ -13,6 +13,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-optflags.patch
 Patch1:		easy-rsa2.patch
+Patch2:		%{name}-pam.patch
 URL:		http://openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -78,6 +79,7 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 %setup -q -n %{name}-%{version}_%{snap}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 mv plugin/auth-pam/README README.auth-pam
 mv plugin/down-root/README README.down-root
