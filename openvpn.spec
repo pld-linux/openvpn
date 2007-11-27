@@ -1,5 +1,5 @@
 %define		snap	rc4
-%define		_rel	4
+%define		_rel	5
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
@@ -11,6 +11,7 @@ Source0:	http://openvpn.net/release/%{name}-%{version}_%{snap}.tar.gz
 # Source0-md5:	9fffc0aa0f797b612fa4f52b1e92197b
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Source3:	%{name}-update-resolv-conf
 Patch0:		%{name}-optflags.patch
 Patch1:		easy-rsa2.patch
 Patch2:		%{name}-pam.patch
@@ -84,6 +85,8 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 mv plugin/auth-pam/README README.auth-pam
 mv plugin/down-root/README README.down-root
 
+sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-resolv-conf
+
 %build
 %{__aclocal}
 %{__autoheader}
@@ -124,6 +127,7 @@ cp -a easy-rsa/2.0/pkitool $RPM_BUILD_ROOT%{_sbindir}
 # we use cp -a, not to pull /bin/bash dependency
 cp -a contrib/pull-resolv-conf/client.down $RPM_BUILD_ROOT%{_libdir}/%{name}
 cp -a contrib/pull-resolv-conf/client.up $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -a contrib/update-resolv-conf $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -149,6 +153,7 @@ fi
 %dir %{_libdir}/%{name}
 %attr(755,root,root) %{_libdir}/%{name}/client.down
 %attr(755,root,root) %{_libdir}/%{name}/client.up
+%attr(755,root,root) %{_libdir}/%{name}/update-resolv-conf
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %{_mandir}/man?/*
