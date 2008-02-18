@@ -1,5 +1,5 @@
-%define		snap	rc4
-%define		_rel	6
+%define		snap	rc7
+%define		_rel	1
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
@@ -8,7 +8,7 @@ Release:	0.%{snap}.%{_rel}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://openvpn.net/release/%{name}-%{version}_%{snap}.tar.gz
-# Source0-md5:	9fffc0aa0f797b612fa4f52b1e92197b
+# Source0-md5:	38c8fdfaa3465d740049468bc7b66fcf
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
