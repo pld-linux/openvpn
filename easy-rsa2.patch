@@ -367,6 +367,6 @@
 -# Issue rm -rf warning
 -echo NOTE: If you run ./clean-all, I will be doing a rm -rf on $KEY_DIR
 -
- # Increase this to 2048 if you
- # are paranoid.  This will slow
- # down TLS negotiation performance
+ # PKCS11 fixes
+ export PKCS11_MODULE_PATH="dummy"
+ export PKCS11_PIN="dummy"
