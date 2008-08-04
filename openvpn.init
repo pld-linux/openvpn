@@ -75,7 +75,7 @@ start() {
 				fi
 
 				daemon openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
-					--config $config --cd /etc/openvpn
+					--config $config --cd /etc/openvpn ${OPENVPN_OPT}
 				RET=$?
 			fi
 			[ $RETVAL -eq 0 ] && RETVAL=$RET
