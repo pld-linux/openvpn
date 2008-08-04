@@ -21,6 +21,7 @@ BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
+BuildRequires:	pkcs11-helper-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/sbin/ip
