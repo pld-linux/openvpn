@@ -1,13 +1,13 @@
-%define		snap	rc9
-%define		_rel	3
+%define		subver	rc9
+%define		rel	3
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.1
-Release:	0.%{snap}.%{_rel}
+Release:	0.%{subver}.%{rel}
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://openvpn.net/release/%{name}-%{version}_%{snap}.tar.gz
+Source0:	http://www.openvpn.net/release/%{name}-%{version}_%{subver}.tar.gz
 # Source0-md5:	f435e4ad43cf4323e942da570bae4951
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -15,7 +15,7 @@ Source3:	%{name}-update-resolv-conf
 Patch0:		%{name}-optflags.patch
 Patch1:		easy-rsa2.patch
 Patch2:		%{name}-pam.patch
-URL:		http://openvpn.net/
+URL:		http://www.openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	lzo-devel
@@ -67,7 +67,7 @@ command line tool, that can be found in the easy-rsa subdirectory of
 the OpenVPN distribution.
 
 For step-by-step instructions, see the HOWTO:
-<http://openvpn.net/howto.html>.
+<http://www.openvpn.net/index.php/documentation/howto.html>.
 
 %description -n easy-rsa -l pl.UTF-8
 To jest mały pakiet do zarządzania kluczami RSA, oparty na narzędziu
@@ -75,10 +75,10 @@ linii poleceń openssl. Pakiet ten pochodzi z podkatalogu easy-rsa
 dystrybucji OpenVPN.
 
 Instrukcje krok po kroku można znaleźć w HOWTO:
-<http://openvpn.net/howto.html>.
+<http://www.openvpn.net/index.php/documentation/howto.html>.
 
 %prep
-%setup -q -n %{name}-%{version}_%{snap}
+%setup -q -n %{name}-%{version}_%{subver}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
