@@ -74,7 +74,7 @@ start() {
 					continue
 				fi
 
-				daemon /usr/sbin/openvpn --daemon --writepid "/var/run/openvpn/$tun.pid" \
+				daemon --pidfile /var/run/openvpn/$tun.pid /usr/sbin/openvpn --daemon --writepid /var/run/openvpn/$tun.pid \
 					--config $config --cd /etc/openvpn ${OPENVPN_OPT}
 				RET=$?
 			fi
