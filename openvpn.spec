@@ -1,4 +1,4 @@
-%define		subver	rc11
+%define		subver	rc13
 %define		rel	1
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
@@ -8,7 +8,7 @@ Release:	0.%{subver}.%{rel}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.openvpn.net/release/%{name}-%{version}_%{subver}.tar.gz
-# Source0-md5:	424d9305b478ae112a7d2d8bfdd4b7f5
+# Source0-md5:	7f9637cab862579e99666d4cb98d853b
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
@@ -98,7 +98,7 @@ sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-re
 	--enable-password-save \
 	--enable-pthread \
 	--enable-iproute2
-%{__make}
+%{__make} CFLAGS="%{rpmcflags} -D_GNU_SOURCE"
 
 %{__make} -C plugin/auth-pam \
 	OPTFLAGS="%{rpmcflags}"
