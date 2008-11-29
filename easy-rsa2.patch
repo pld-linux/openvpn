@@ -265,25 +265,25 @@
          # Build cert/key
 -	( [ $DO_REQ -eq 0 ] || $OPENSSL req $BATCH -days $KEY_EXPIRE $NODES_REQ -new -newkey rsa:$KEY_SIZE \
 +	( [ $DO_REQ -eq 0 ] || openssl req $BATCH -days $KEY_EXPIRE $NODES_REQ -new -newkey rsa:$KEY_SIZE \
- 	        -keyout "$KEY_CN.key" -out "$KEY_CN.csr" $REQ_EXT -config "$KEY_CONFIG" $PKCS11_ARGS ) && \
--	    ( [ $DO_CA -eq 0 ]  || $OPENSSL ca $BATCH -days $KEY_EXPIRE -out "$KEY_CN.crt" \
-+	    ( [ $DO_CA -eq 0 ]  || openssl ca $BATCH -days $KEY_EXPIRE -out "$KEY_CN.crt" \
- 	        -in "$KEY_CN.csr" $CA_EXT -md sha1 -config "$KEY_CONFIG" ) && \
--	    ( [ $DO_P12 -eq 0 ] || $OPENSSL pkcs12 -export -inkey "$KEY_CN.key" \
-+	    ( [ $DO_P12 -eq 0 ] || openssl pkcs12 -export -inkey "$KEY_CN.key" \
- 	        -in "$KEY_CN.crt" -certfile "$CA.crt" -out "$KEY_CN.p12" $NODES_P12 ) && \
- 	    ( [ $DO_CA -eq 0 -o $DO_P11 -eq 1 ]  || chmod 0600 "$KEY_CN.key" ) && \
- 	    ( [ $DO_P12 -eq 0 ] || chmod 0600 "$KEY_CN.p12" )
+ 	        -keyout "$FN.key" -out "$FN.csr" $REQ_EXT -config "$KEY_CONFIG" $PKCS11_ARGS ) && \
+-	    ( [ $DO_CA -eq 0 ]  || $OPENSSL ca $BATCH -days $KEY_EXPIRE -out "$FN.crt" \
++	    ( [ $DO_CA -eq 0 ]  || openssl ca $BATCH -days $KEY_EXPIRE -out "$FN.crt" \
+ 	        -in "$FN.csr" $CA_EXT -md sha1 -config "$KEY_CONFIG" ) && \
+-	    ( [ $DO_P12 -eq 0 ] || $OPENSSL pkcs12 -export -inkey "$FN.key" \
++	    ( [ $DO_P12 -eq 0 ] || openssl pkcs12 -export -inkey "$FN.key" \
+ 	        -in "$FN.crt" -certfile "$CA.crt" -out "$FN.p12" $NODES_P12 ) && \
+ 	    ( [ $DO_CA -eq 0 -o $DO_P11 -eq 1 ]  || chmod 0600 "$FN.key" ) && \
+ 	    ( [ $DO_P12 -eq 0 ] || chmod 0600 "$FN.p12" )
  
  	# Load certificate into PKCS#11 token
  	if [ $DO_P11 -eq 1 ]; then
--		$OPENSSL x509 -in "$KEY_CN.crt" -inform PEM -out "$KEY_CN.crt.der" -outform DER && \
--		  $PKCS11TOOL --module "$PKCS11_MODULE_PATH" --write-object "$KEY_CN.crt.der" --type cert \
-+		openssl x509 -in "$KEY_CN.crt" -inform PEM -out "$KEY_CN.crt.der" -outform DER && \
-+		  pkcs11-tool --module "$PKCS11_MODULE_PATH" --write-object "$KEY_CN.crt.der" --type cert \
+-		$OPENSSL x509 -in "$FN.crt" -inform PEM -out "$FN.crt.der" -outform DER && \
+-		  $PKCS11TOOL --module "$PKCS11_MODULE_PATH" --write-object "$FN.crt.der" --type cert \
++		openssl x509 -in "$FN.crt" -inform PEM -out "$FN.crt.der" -outform DER && \
++		  pkcs11-tool --module "$PKCS11_MODULE_PATH" --write-object "$FN.crt.der" --type cert \
  			--login --pin "$PKCS11_PIN" \
  			--slot "$PKCS11_SLOT" --id "$PKCS11_ID" --label "$PKCS11_LABEL" 
- 		[ -e "$KEY_CN.crt.der" ]; rm "$KEY_CN.crt.der"
+ 		[ -e "$FN.crt.der" ]; rm "$FN.crt.der"
 --- openvpn-2.1_rc4/easy-rsa/2.0/revoke-full	2007-04-26 00:38:44.000000000 +0300
 +++ openvpn-2.1_rc4-rsa2/easy-rsa/2.0/revoke-full	2007-09-18 14:08:03.698714729 +0300
 @@ -1,7 +1,10 @@
