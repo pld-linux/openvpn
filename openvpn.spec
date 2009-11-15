@@ -1,4 +1,4 @@
-%define		subver	rc20
+%define		subver	rc21
 %define		rel	1
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
@@ -8,7 +8,7 @@ Release:	0.%{subver}.%{rel}
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.openvpn.net/release/%{name}-%{version}_%{subver}.tar.gz
-# Source0-md5:	8187f8f21507faac5e320e32747203b8
+# Source0-md5:	c9124abda3aa140172eefc7b31f1a100
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
