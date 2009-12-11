@@ -1,14 +1,12 @@
-%define		subver	rc22
-%define		rel	1
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.1
-Release:	0.%{subver}.%{rel}
+Version:	2.1.0
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://www.openvpn.net/release/%{name}-%{version}_%{subver}.tar.gz
-# Source0-md5:	a4ca5d79f7467fc537b216bff1c744f2
+Source0:	http://www.openvpn.net/release/%{name}-%{version}.tar.gz
+# Source0-md5:	452a83326ae198cf961e9ae02539c8fb
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
@@ -78,7 +76,7 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 <http://www.openvpn.net/index.php/documentation/howto.html>.
 
 %prep
-%setup -q -n %{name}-%{version}_%{subver}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
