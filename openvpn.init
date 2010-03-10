@@ -142,6 +142,11 @@ case "$1" in
 		tunlup $tun && echo -n " $tun($(cat $pidfile))"
 	done
 	echo ""
+	nm_ovpn_pid=$(ps -o pid= -C nm-openvpn-service)
+	if [ "$nm_ovpn_pid" ]; then
+		nls "NM ($nm_ovpn_pid) managed OpenVPN sessions"
+		ps -o pid,user,command --ppid=$nm_ovpn_pid
+	fi
 	tunlsup
 	exit $?
 	;;
