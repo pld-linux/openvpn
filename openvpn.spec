@@ -2,7 +2,7 @@ Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.1.1
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://www.openvpn.net/release/%{name}-%{version}.tar.gz
@@ -10,6 +10,9 @@ Source0:	http://www.openvpn.net/release/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
+# https://sourceforge.net/tracker/?func=detail&aid=2998676&group_id=48978&atid=454719
+Source4:	http://svn.openvpn.net/projects/openvpn/trunk/openvpn/management/management-notes.txt
+# Source4-md5:	49dfbc513caf09d310f81bf330598c4b
 Patch0:		%{name}-optflags.patch
 Patch1:		easy-rsa2.patch
 Patch2:		%{name}-pam.patch
@@ -86,6 +89,8 @@ mv plugin/down-root/README README.down-root
 
 sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-resolv-conf
 
+cp %{SOURCE4} .
+
 %build
 %{__aclocal}
 %{__autoheader}
@@ -143,7 +148,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README* ChangeLog sample-config-files sample-keys sample-scripts
+%doc AUTHORS README* ChangeLog sample-config-files sample-keys sample-scripts management-notes.txt
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
