@@ -31,7 +31,7 @@ fi
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		msg_network_down OpenVPN
+		msg_network_down "OpenVPN"
 		exit 1
 	fi
 else
@@ -59,79 +59,68 @@ tunlsup() {
 
 start() {
 	# Check if the service is already running?
-	if ! tunlsup; then
-		msg_starting "OpenVPN"; started
-		for tun in $TUNNELS; do
-			config="/etc/openvpn/$tun.conf"
-			if [ ! -f "$config" ]; then
-				nls "Invalid tunnel \`%s': missing config: %s" $tun "$config"
-				fail
-				RET=1
-			else
-				show "Starting OpenVPN tunnel %s" "$tun"
-				if tunlup $tun; then
-					started
-					continue
-				fi
-
-				daemon --pidfile /var/run/openvpn/$tun.pid /usr/sbin/openvpn --daemon --writepid /var/run/openvpn/$tun.pid \
-					--config $config --cd /etc/openvpn ${OPENVPN_OPT}
-				RET=$?
-			fi
-			[ $RETVAL -eq 0 ] && RETVAL=$RET
-		done
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
-	else
+	if tunlsup; then
 		msg_already_running "OpenVPN"
+		return
 	fi
+
+	msg_starting "OpenVPN"; started
+	for tun in $TUNNELS; do
+		config="/etc/openvpn/$tun.conf"
+		if [ ! -f "$config" ]; then
+			nls "Invalid tunnel \`%s': missing config: %s" $tun "$config"
+			fail
+			RET=1
+		else
+			show "Starting OpenVPN tunnel %s" "$tun"
+			if tunlup $tun; then
+				started
+				continue
+			fi
+
+			daemon --pidfile /var/run/openvpn/$tun.pid /usr/sbin/openvpn --daemon --writepid /var/run/openvpn/$tun.pid \
+				--config $config --cd /etc/openvpn ${OPENVPN_OPT}
+			RET=$?
+		fi
+		[ $RETVAL -eq 0 ] && RETVAL=$RET
+	done
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/openvpn
 }
 
 stop() {
-	if tunlsup; then
-		# Stop daemons.
-		msg_stopping "OpenVPN"; started
-		for tun in $TUNNELS; do
-			pidfile=/var/run/openvpn/$tun.pid
-			[ -f "$pidfile" ] || continue
-			pid=`cat "$pidfile"`
-			show "Stopping OpenVPN tunnel %s" "$tun"; busy
-			killproc --pidfile openvpn/$tun.pid || err=1
-		done
-		rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
-	else
+	if ! tunlsup; then
 		msg_not_running "OpenVPN"
+		return
 	fi
+
+	# Stop daemons.
+	msg_stopping "OpenVPN"; started
+	for tun in $TUNNELS; do
+		pidfile=/var/run/openvpn/$tun.pid
+		[ -f "$pidfile" ] || continue
+		pid=`cat "$pidfile"`
+		show "Stopping OpenVPN tunnel %s" "$tun"; busy
+		killproc --pidfile openvpn/$tun.pid || err=1
+	done
+	rm -f /var/lock/subsys/openvpn >/dev/null 2>&1
 }
 
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
-  	start
-	;;
-  stop)
-  	stop
-	;;
-  reload|force-reload)
-	if tunlsup; then
-		msg_reloading "OpenVPN"; started
-		for tun in $TUNNELS; do
-			show "Reloading OpenVPN tunnel %s" "$tun"
-			killproc --pidfile openvpn/$tun.pid openvpn -HUP
-			[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
-		done
-	else
-		msg_not_running OpenVPN
-		exit 7
+reload() {
+	if ! tunlsup; then
+		msg_not_running "OpenVPN"
+		RETVAL=7
+		return
 	fi
-	;;
-  restart)
-	stop
-	sleep 1
-	start
-	exit $?
-	;;
-  status)
+
+	msg_reloading "OpenVPN"; started
+	for tun in $TUNNELS; do
+		show "Reloading OpenVPN tunnel %s" "$tun"
+		killproc --pidfile openvpn/$tun.pid openvpn -HUP
+		[ $? -ne 0 -a $RETVAL -eq 0 ] && RETVAL=7
+	done
+}
+
+status() {
 	nls "Configured tunnels:"
    	echo " $TUNNELS"
 	nls "Currently active tunnels:"
@@ -148,7 +137,28 @@ case "$1" in
 		ps -o pid,user,command --ppid=$nm_ovpn_pid
 	fi
 	tunlsup
-	exit $?
+	RETVAL=$?
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  reload|force-reload)
+	reload
+	;;
+  restart)
+	stop
+	sleep 1
+	start
+	;;
+  status)
+	status
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
