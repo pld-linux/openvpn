@@ -140,6 +140,8 @@ status() {
 	RETVAL=$?
 }
 
+upstart_controlled --except status
+
 RETVAL=0
 # See how we were called.
 case "$1" in

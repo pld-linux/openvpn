@@ -2,7 +2,7 @@ Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.1.4
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
@@ -26,7 +26,7 @@ BuildRequires:	pkcs11-helper-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/sbin/ip
-Requires:	rc-scripts >= 0.4.0.19
+Requires:	rc-scripts >= 0.4.3.0
 Conflicts:	kernel < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
