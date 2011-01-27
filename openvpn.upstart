@@ -1,0 +1,33 @@
+description "Start the OpenVPN tunnels"
+
+start on pld.network-started
+stop on pld.network-stopped
+
+task
+console output
+
+script
+	[ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
+
+	for tun in $TUNNELS; do
+		if [ ! -f "/etc/openvpn/$tun.conf" ]; then
+			# skip invalid tunnels
+			continue
+		fi
+
+		initctl start openvpn-tunnel TUNNEL=$tun >/dev/null || :
+	done
+end script
+
+pre-stop script
+	[ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
+
+	for tun in $TUNNELS; do
+		if [ ! -f "/etc/openvpn/$tun.conf" ]; then
+			# skip invalid tunnels
+			continue
+		fi
+
+		initctl stop openvpn-tunnel TUNNEL=$tun >/dev/null || :
+	done
+end script
