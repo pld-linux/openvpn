@@ -1,3 +1,7 @@
+
+# Conditional build:
+%bcond_without	pkcs11		# build without PKCS#11 support
+
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
@@ -22,7 +26,7 @@ BuildRequires:	automake
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
-BuildRequires:	pkcs11-helper-devel
+%{?with_pkcs11:BuildRequires:	pkcs11-helper-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/sbin/ip
@@ -98,6 +102,7 @@ cp %{SOURCE4} .
 %{__automake}
 
 %configure \
+	%{!?with_pkcs11:--disable-pkcs11} \
 	--enable-password-save \
 	--enable-pthread \
 	--enable-iproute2
