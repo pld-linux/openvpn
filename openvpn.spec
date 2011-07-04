@@ -7,12 +7,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.2.0
+Version:	2.2.1
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	4f440603eac45fec7be218b87d570834
+# Source0-md5:	500bee5449b29906150569aaf2eb2730
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
@@ -109,14 +109,13 @@ cp %{SOURCE4} .
 %configure \
 	%{!?with_pkcs11:--disable-pkcs11} \
 	--enable-password-save \
-	--enable-pthread \
 	--enable-iproute2
-%{__make} CFLAGS="%{rpmcflags} -D_GNU_SOURCE"
+%{__make} CFLAGS="%{rpmcflags} %{rpmcppflags} -D_GNU_SOURCE"
 
 %{__make} -C plugin/auth-pam \
-	OPTFLAGS="%{rpmcflags}"
+	OPTFLAGS="%{rpmcflags} %{rpmcppflags}"
 %{__make} -C plugin/down-root \
-	OPTFLAGS="%{rpmcflags}"
+	OPTFLAGS="%{rpmcflags} %{rpmcppflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -134,7 +133,8 @@ install plugin/{auth-pam,down-root}/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/plugi
 # easy-rsa 2.0
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_datadir}}/easy-rsa
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa/keys
-cp -a easy-rsa/2.0/{vars,openssl.cnf} $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa
+cp -a easy-rsa/2.0/vars $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa
+cp -a easy-rsa/2.0/openssl-1.0.0.cnf $RPM_BUILD_ROOT%{_sysconfdir}/easy-rsa/openssl.cnf
 cp -a easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,revoke-full,sign-req} $RPM_BUILD_ROOT%{_datadir}/easy-rsa
 cp -a easy-rsa/2.0/pkitool $RPM_BUILD_ROOT%{_sbindir}
 
