@@ -8,7 +8,7 @@ Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.2.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
@@ -109,7 +109,12 @@ cp %{SOURCE4} .
 %configure \
 	%{!?with_pkcs11:--disable-pkcs11} \
 	--enable-password-save \
-	--enable-iproute2
+	--enable-iproute2 \
+	--with-ifconfig-path=/sbin/ifconfig \
+	--with-iproute-path=/sbin/ip \
+	--with-route-path=/sbin/route \
+	--with-netstat-path=/bin/netstat
+
 %{__make} CFLAGS="%{rpmcflags} %{rpmcppflags} -D_GNU_SOURCE"
 
 %{__make} -C plugin/auth-pam \
