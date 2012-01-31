@@ -16,6 +16,7 @@ Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.g
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-update-resolv-conf
+Source4:	%{name}.tmpfiles
 Patch0:		%{name}-optflags.patch
 Patch1:		easy-rsa2.patch
 Patch2:		%{name}-pam.patch
@@ -120,7 +121,8 @@ sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-re
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/openvpn,%{_sbindir},%{_mandir}/man8} \
-	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},/var/run/openvpn,%{_includedir},%{_libdir}/%{name}/plugins}
+	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},/var/run/openvpn,%{_includedir}} \
+	$RPM_BUILD_ROOT{%{_libdir}/%{name}/plugins,/usr/lib/tmpfiles.d}
 
 install openvpn $RPM_BUILD_ROOT%{_sbindir}
 install *.8 $RPM_BUILD_ROOT%{_mandir}/man8
@@ -129,6 +131,8 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install openvpn-plugin.h $RPM_BUILD_ROOT%{_includedir}
 install plugin/{auth-pam,down-root}/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins
+
+install %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 # easy-rsa 2.0
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_datadir}}/easy-rsa
@@ -171,6 +175,7 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %{_mandir}/man?/*
 %dir /var/run/openvpn
+/usr/lib/tmpfiles.d/%{name}.conf
 
 %files devel
 %defattr(644,root,root,755)
