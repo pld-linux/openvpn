@@ -28,16 +28,6 @@ fi
 # Source networking configuration.
 . /etc/sysconfig/network
 
-# Check that networking is up.
-if is_yes "${NETWORKING}"; then
-	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		msg_network_down "OpenVPN"
-		exit 1
-	fi
-else
-	exit 0
-fi
-
 # check if the tunnel $1 is up
 tunlup() {
 	local tun="$1"
