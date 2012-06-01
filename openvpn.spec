@@ -1,8 +1,6 @@
 
 # Conditional build:
 %bcond_without	pkcs11		# build without PKCS#11 support
-%bcond_with	ipv6_payload	# build with ipv6 payload support in server
-				# mode
 
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
@@ -20,8 +18,6 @@ Source4:	%{name}.tmpfiles
 Patch0:		%{name}-optflags.patch
 Patch1:		easy-rsa2.patch
 Patch2:		%{name}-pam.patch
-# http://www.greenie.net/ipv6/openvpn-2.1-ipv6-20100307-1.patch.gz
-Patch3:		%{name}-ipv6_payload.patch
 URL:		http://www.openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -89,7 +85,6 @@ Instrukcje krok po kroku można znaleźć w HOWTO:
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%{?with_ipv6_payload:%patch3 -p1}
 
 mv plugin/auth-pam/README README.auth-pam
 mv plugin/down-root/README README.down-root
