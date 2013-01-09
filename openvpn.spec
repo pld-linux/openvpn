@@ -18,6 +18,7 @@ Patch0:		%{name}-pam.patch
 URL:		http://www.openvpn.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libselinux-devel
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
@@ -70,6 +71,8 @@ sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-re
 	%{!?with_pkcs11:--disable-pkcs11} \
 	--enable-password-save \
 	--enable-iproute2 \
+	--enable-selinux \
+	--enable-systemd \
 	IFCONFIG=/sbin/ifconfig \
 	IPROUTE=/sbin/ip \
 	ROUTE=/sbin/route \
