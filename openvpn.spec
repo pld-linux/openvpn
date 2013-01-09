@@ -1,7 +1,6 @@
 
 # Conditional build:
 %bcond_without	pkcs11		# build without PKCS#11 support
-				# mode
 
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
