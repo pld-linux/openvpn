@@ -93,6 +93,8 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/*.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -117,11 +119,11 @@ fi
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
-%{_mandir}/man?/*
+%{_mandir}/man8/openvpn.8*
 %dir /var/run/openvpn
 /usr/lib/tmpfiles.d/%{name}.conf
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/README.plugins sample/sample-plugins
-%{_includedir}/*.h
+%{_includedir}/openvpn-plugin.h
