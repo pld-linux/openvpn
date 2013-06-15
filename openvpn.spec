@@ -7,7 +7,7 @@ Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.3.2
 Release:	1
-License:	GPL
+License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	06e5f93dbf13f2c19647ca15ffc23ac1
@@ -16,7 +16,7 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Patch0:		%{name}-pam.patch
 URL:		http://www.openvpn.net/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 BuildRequires:	libselinux-devel
 BuildRequires:	lzo-devel
