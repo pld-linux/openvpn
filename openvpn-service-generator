@@ -1,0 +1,21 @@
+#!/bin/sh
+
+destunitdir=${1:-/tmp}
+
+# Do nothing if target is disabled
+[ -e /etc/systemd/system/multi-user.target.wants/openvpn.target ] || exit 0
+
+[ -f /etc/sysconfig/openvpn ] && . /etc/sysconfig/openvpn
+
+if [ -d $destunitdir/openvpn.target.wants ]; then
+	rm -f $destunitdir/openvpn.target.wants/openvpn@*.service
+else
+	mkdir -p $destunitdir/openvpn.target.wants
+fi
+
+for tun in $TUNNELS; do
+	[ -L $destunitdir/openvpn.target.wants/openvpn@$tun.service ] && \
+		continue
+	ln -s /lib/systemd/system/openvpn@.service \
+		$destunitdir/openvpn.target.wants/openvpn@$tun.service
+done

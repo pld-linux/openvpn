@@ -7,5 +7,12 @@ SERVICE_RUN_NICE_LEVEL="+0"
 #OPENVPN_OPT="--script-security 2"
 
 # Tunnels to set up. For each tunnel name, there should be config file in /etc/openvpn
+#
+# On systems running systemd after updating the list below you have to
+# restart systemd to regenerate openvpn@TUNNEL.service services
+# (systemctl --system daemon-reload), stop and start openvpn.target when
+# removing elements from list or restart openvpn.target when only adding
+# elements (systemctl stop openvpn.target / systemctl restart openvpn.target).
+#
 #TUNNELS="mytunnel"
 TUNNELS=""

@@ -6,7 +6,7 @@ Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.3.2
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
@@ -14,6 +14,9 @@ Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.g
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
+Source4:	openvpn-service-generator
+Source5:	openvpn.target
+Source6:	openvpn@.service
 Patch0:		%{name}-pam.patch
 URL:		http://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
@@ -84,14 +87,20 @@ sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-re
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/openvpn,%{_sbindir},%{_mandir}/man8} \
 	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},/var/run/openvpn,%{_includedir}} \
-	$RPM_BUILD_ROOT{%{_libdir}/%{name}/plugins,/usr/lib/tmpfiles.d}
+	$RPM_BUILD_ROOT{%{_libdir}/%{name}/plugins,%{systemdtmpfilesdir},%{systemdunitdir}} \
+	$RPM_BUILD_ROOT/lib/systemd/system-generators
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+
+install -p %{SOURCE4} $RPM_BUILD_ROOT/lib/systemd/system-generators/openvpn-service-generator
+install -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdunitdir}/openvpn.target
+install -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdunitdir}/openvpn@.service
+ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/openvpn.service
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/*.la
 
@@ -101,12 +110,25 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add openvpn
 %service openvpn restart "OpenVPN"
+%systemd_post openvpn.target
 
 %preun
 if [ "$1" = "0" ]; then
 	%service openvpn stop
 	/sbin/chkconfig --del openvpn
 fi
+%systemd_preun openvpn.target
+
+%postun
+%systemd_reload
+
+%triggerpostun -- openvpn < 2.3.2-2
+[ -f /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm
+[ ${RPM_ENABLE_SYSTEMD_SERVICE:-yes} = no ] && exit 0
+[ "$(echo /etc/rc.d/rc[0-6].d/S[0-9][0-9]openvpn)" = "/etc/rc.d/rc[0-6].d/S[0-9][0-9]openvpn" ] && exit 0
+export SYSTEMD_LOG_LEVEL=warning SYSTEMD_LOG_TARGET=syslog
+/bin/systemctl --quiet enable openvpn.target || :
+exit 0
 
 %files
 %defattr(644,root,root,755)
@@ -116,6 +138,10 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(755,root,root) /lib/systemd/system-generators/%{name}-service-generator
+%{systemdunitdir}/%{name}.service
+%{systemdunitdir}/%{name}.target
+%{systemdunitdir}/%{name}@.service
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
