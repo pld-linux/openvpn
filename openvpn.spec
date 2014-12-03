@@ -5,12 +5,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.3.4
+Version:	2.3.6
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	04d47237907faabe9d046970ffe44b2e
+# Source0-md5:	6ca03fe0fd093e0d01601abee808835c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -27,6 +27,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
 %{?with_pkcs11:BuildRequires:	pkcs11-helper-devel}
 BuildRequires:	rpmbuild(macros) >= 1.671
+BuildRequires:	systemd-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	/sbin/ip
