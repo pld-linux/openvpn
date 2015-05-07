@@ -6,7 +6,7 @@ Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
 Version:	2.3.6
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
@@ -34,6 +34,9 @@ Requires:	/sbin/ip
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
 Conflicts:	kernel < 2.4
+# require split plugin packages, for safe migration purposes. added in 2.3.6-2, drop if the time is right
+Requires:	%{name}-plugin-auth-pam = %{version}-%{release}
+Requires:	%{name}-plugin-down-root = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
@@ -48,6 +51,40 @@ OpenVPN jest mocnym i silnie konfigurowalnym serwerem VPN (Wirtualne
 Sieci Prywatne), który może być użyty do bezpiecznego łączenia dwóch
 lub więcej prywatnych sieci używając zaszyfrowanego tunelu poprzez
 internet.
+
+%package plugin-auth-pam
+Summary:	Plugin for username/password authentication via PAM
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-auth-pam
+The openvpn-auth-pam module implements username/password
+authentication via PAM, and essentially allows any authentication
+method supported by PAM (such as LDAP, RADIUS, or Linux Shadow
+passwords) to be used with OpenVPN. While PAM supports
+username/password authentication, this can be combined with X509
+certificates to provide two indepedent levels of authentication.
+
+This module uses a split privilege execution model which will function
+even if you drop openvpn daemon privileges using the user, group, or
+chroot directives.
+
+%package plugin-down-root
+Summary:	Plugin to allow root after privilege drop
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-down-root
+The down-root module allows an OpenVPN configuration to call a down
+script with root privileges, even when privileges have been dropped
+using --user/--group/--chroot.
+
+This module uses a split privilege execution model which will fork()
+before OpenVPN drops root privileges, at the point where the --up
+script is usually called. The module will then remain in a wait state
+until it receives a message from OpenVPN via pipe to execute the down
+script. Thus, the down script will be run in the same execution
+environment as the up script.
 
 %package devel
 Summary:	Header files for OpenVPN plugins development
@@ -137,7 +174,7 @@ exit 0
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS README* ChangeLog sample/sample-{config-files,keys,scripts} doc/management-notes.txt
-%doc *.IPv6 src/plugins/*/README.*
+%doc *.IPv6
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
@@ -148,11 +185,19 @@ exit 0
 %{systemdunitdir}/%{name}@.service
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
-%attr(755,root,root) %{_libdir}/%{name}/plugins/openvpn-plugin-auth-pam.so
-%attr(755,root,root) %{_libdir}/%{name}/plugins/openvpn-plugin-down-root.so
 %{_mandir}/man8/openvpn.8*
 %dir /var/run/openvpn
 %{systemdtmpfilesdir}/%{name}.conf
+
+%files plugin-auth-pam
+%defattr(644,root,root,755)
+%doc src/plugins/auth-pam/README.auth-pam
+%attr(755,root,root) %{_libdir}/%{name}/plugins/openvpn-plugin-auth-pam.so
+
+%files plugin-down-root
+%defattr(644,root,root,755)
+%doc src/plugins/down-root/README.down-root
+%attr(755,root,root) %{_libdir}/%{name}/plugins/openvpn-plugin-down-root.so
 
 %files devel
 %defattr(644,root,root,755)
