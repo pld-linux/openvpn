@@ -14,9 +14,9 @@ Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.g
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
-Source4:	openvpn-service-generator
-Source5:	openvpn.target
-Source6:	openvpn@.service
+Source4:	%{name}-service-generator
+Source5:	%{name}.target
+Source6:	%{name}@.service
 Patch0:		%{name}-pam.patch
 URL:		http://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
@@ -91,21 +91,22 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/openvpn,%{_sbindir},%{_mandir}/man8} \
 	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},/var/run/openvpn,%{_includedir}} \
 	$RPM_BUILD_ROOT{%{_libdir}/%{name}/plugins,%{systemdtmpfilesdir},%{systemdunitdir}} \
-	$RPM_BUILD_ROOT/lib/systemd/system-generators
+	$RPM_BUILD_ROOT%{systemdunitdir}-generators
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
-install -p %{SOURCE4} $RPM_BUILD_ROOT/lib/systemd/system-generators/openvpn-service-generator
+install -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdunitdir}-generators/openvpn-service-generator
 install -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdunitdir}/openvpn.target
 install -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdunitdir}/openvpn@.service
 ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/openvpn.service
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/*.la
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -141,16 +142,17 @@ exit 0
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(755,root,root) /lib/systemd/system-generators/%{name}-service-generator
+%attr(755,root,root) %{systemdunitdir}-generators/%{name}-service-generator
 %{systemdunitdir}/%{name}.service
 %{systemdunitdir}/%{name}.target
 %{systemdunitdir}/%{name}@.service
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
-%attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
+%attr(755,root,root) %{_libdir}/%{name}/plugins/openvpn-plugin-auth-pam.so
+%attr(755,root,root) %{_libdir}/%{name}/plugins/openvpn-plugin-down-root.so
 %{_mandir}/man8/openvpn.8*
 %dir /var/run/openvpn
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 
 %files devel
 %defattr(644,root,root,755)
