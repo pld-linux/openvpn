@@ -17,6 +17,7 @@ Source3:	%{name}.tmpfiles
 Source4:	%{name}-service-generator
 Source5:	%{name}.target
 Source6:	%{name}@.service
+Source7:	%{name}-update-resolv-conf
 Patch0:		%{name}-pam.patch
 URL:		http://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
@@ -102,7 +103,7 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 %setup -q
 %patch0 -p1
 
-sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE3} > contrib/update-resolv-conf
+sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE7} > contrib/update-resolv-conf
 
 %build
 %{__aclocal} -I m4
@@ -141,6 +142,11 @@ install -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdunitdir}-generators/openvpn-servic
 install -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdunitdir}/openvpn.target
 install -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdunitdir}/openvpn@.service
 ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/openvpn.service
+
+# we use "cp", not "install", not to pull /bin/bash dependency
+cp -p contrib/pull-resolv-conf/client.down $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -p contrib/pull-resolv-conf/client.up $RPM_BUILD_ROOT%{_libdir}/%{name}
+cp -p contrib/update-resolv-conf $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/*.la
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
@@ -184,6 +190,9 @@ exit 0
 %{systemdunitdir}/%{name}.target
 %{systemdunitdir}/%{name}@.service
 %dir %{_libdir}/%{name}
+%attr(755,root,root) %{_libdir}/%{name}/client.down
+%attr(755,root,root) %{_libdir}/%{name}/client.up
+%attr(755,root,root) %{_libdir}/%{name}/update-resolv-conf
 %dir %{_libdir}/%{name}/plugins
 %{_mandir}/man8/openvpn.8*
 %dir /var/run/openvpn
