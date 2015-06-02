@@ -9,6 +9,10 @@ Version:	2.3.6
 Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
+# when updating, use .xz url:
+#Source0:	http://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
+#BuildRequires:	tar >= 1:1.22
+#BuildRequires:	xz
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	6ca03fe0fd093e0d01601abee808835c
 Source1:	%{name}.init
