@@ -1,4 +1,4 @@
-
+#
 # Conditional build:
 %bcond_without	pkcs11		# build without PKCS#11 support
 
@@ -59,7 +59,8 @@ internet.
 
 %package plugin-auth-pam
 Summary:	Plugin for username/password authentication via PAM
-Group:		Development/Libraries
+Summary(pl.UTF-8):	Wtyczka do uwierzytelniania nazwą użytkownika i hasłem poprzez PAM
+Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-auth-pam
@@ -74,9 +75,22 @@ This module uses a split privilege execution model which will function
 even if you drop openvpn daemon privileges using the user, group, or
 chroot directives.
 
+%description plugin-auth-pam -l pl.UTF-8
+Moduł openvpn-auth-pam implementuje uwierzytelnianie nazwą użytkownika
+i hasłem poprzez PAM, zasadniczo pozwalając na korzystanie z dowolnej
+metody uwierzytelniania obsługiwanej przez PAM (np. LDAP, RADIUS,
+hasła shadow) z OpenVPN. Jako że PAM obsługuje uwierzytelnianie nazwą
+użytkownika i hasłem, to można je łączyć z certyfikatami X509 w celu
+zapewniania dwóch różnych poziomów uwierzytelnienia.
+
+Ten moduł wykorzystuje model wykonywania z podziałem uprawnień, co
+działa nawet przy odrzuceniu uprawnień demona openvpn przy użyciu
+dyrektyw user, group lub chroot.
+
 %package plugin-down-root
 Summary:	Plugin to allow root after privilege drop
-Group:		Development/Libraries
+Summary(pl.UTF-8):	Wtyczka pozwalająca na wykorzystanie uprawnień roota po odrzuceniu uprawnień
+Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-down-root
@@ -90,6 +104,18 @@ script is usually called. The module will then remain in a wait state
 until it receives a message from OpenVPN via pipe to execute the down
 script. Thus, the down script will be run in the same execution
 environment as the up script.
+
+%description plugin-down-root -l pl.UTF-8
+Moduł down-root pozwala na wywołanie skryptu down z uprawnieniami
+roota z poziomu konfiguracji OpenVPN-a nawet w przypadku odrzucenia
+uprawnień przy użyciu opcji --user/--group/--chroot.
+
+Ten moduł wykorzystuje model wykonywania z podziałem uprawnień, który
+wykonuje fork() przed odrzuceniem uprawnień roota, w miejscu, gdzie
+zwykle jest wywoływany skrypt --up. Moduł pozostaje w stanie
+oczekiwania do odebrania przez potok od OpenVPN-a komunikatu, aby
+wykonać skrypt down. Dzięki temu skrypt down zostanie uruchomiony w
+tym samym środowisku, co skrypt up.
 
 %package devel
 Summary:	Header files for OpenVPN plugins development
