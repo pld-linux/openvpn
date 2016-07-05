@@ -39,9 +39,8 @@ Requires:	/sbin/ip
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
 Conflicts:	kernel < 2.4
-# require split plugin packages, for safe migration purposes. added in 2.3.6-2, drop if the time is right
-Requires:	%{name}-plugin-auth-pam = %{version}-%{release}
-Requires:	%{name}-plugin-down-root = %{version}-%{release}
+Suggests:	%{name}-plugin-auth-pam
+Suggests:	%{name}-plugin-down-root
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var
