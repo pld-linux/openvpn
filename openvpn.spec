@@ -5,6 +5,7 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
+# AREKM: when updating version, use .xz url!
 Version:	2.3.11
 Release:	1
 License:	GPL v2
