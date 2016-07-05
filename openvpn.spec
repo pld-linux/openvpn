@@ -38,7 +38,7 @@ Requires(post,preun,postun):	systemd-units >= 38
 Requires:	/sbin/ip
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
-Conflicts:	kernel < 2.4
+Requires:	uname(release) >= 2.4
 Suggests:	%{name}-plugin-auth-pam
 Suggests:	%{name}-plugin-down-root
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
