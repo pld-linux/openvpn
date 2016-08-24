@@ -1,21 +1,16 @@
 #
 # Conditional build:
-%bcond_without	pkcs11		# build without PKCS#11 support
+%bcond_without	pkcs11		# PKCS#11 support
 
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-# AREKM: when updating version, use .xz url!
-Version:	2.3.11
+Version:	2.3.12
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-# when updating, use .xz url:
-#Source0:	http://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
-#BuildRequires:	tar >= 1:1.22
-#BuildRequires:	xz
-Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	e075a11f9fd0a81dae1ed1760479e9d6
+Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.xz
+# Source0-md5:	63326bab2ebb9efe3c7becaa4f15e1c1
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -26,17 +21,23 @@ Source7:	%{name}-update-resolv-conf
 Patch0:		%{name}-pam.patch
 URL:		http://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
-BuildRequires:	automake
+BuildRequires:	automake >= 1:1.9
 BuildRequires:	libselinux-devel
+BuildRequires:	libtool
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+%{?with_pkcs11:BuildRequires:	p11-kit-devel}
 BuildRequires:	pam-devel
-%{?with_pkcs11:BuildRequires:	pkcs11-helper-devel}
+%{?with_pkcs11:BuildRequires:	pkcs11-helper-devel >= 1.11}
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.671
 BuildRequires:	systemd-devel
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	/sbin/ip
+%{?with_pkcs11:Requires:	pkcs11-helper >= 1.11}
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
 Requires:	uname(release) >= 2.4
@@ -136,21 +137,25 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE7} > contrib/update-resolv-conf
 
 %build
+%{__libtoolize}
 %{__aclocal} -I m4
 %{__autoheader}
 %{__autoconf}
 %{__automake}
 
 %configure \
-	%{!?with_pkcs11:--disable-pkcs11} \
-	--enable-password-save \
-	--enable-iproute2 \
-	--enable-selinux \
-	--enable-systemd \
 	IFCONFIG=/sbin/ifconfig \
 	IPROUTE=/sbin/ip \
 	ROUTE=/sbin/route \
-	NETSTAT=/bin/netstat
+	NETSTAT=/bin/netstat \
+	ac_cv_nsl_inet_ntoa=no \
+	ac_cv_socket_socket=no \
+	ac_cv_resolv_gethostbyname=no \
+	--enable-iproute2 \
+	--enable-password-save \
+	%{?with_pkcs11:--enable-pkcs11} \
+	--enable-selinux \
+	--enable-systemd
 
 %{__make}
 
