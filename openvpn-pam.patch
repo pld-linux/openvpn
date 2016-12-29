@@ -1,11 +1,11 @@
---- x/src/plugins/auth-pam/auth-pam.c~	2012-11-22 13:07:51.000000000 +0100
-+++ x/src/plugins/auth-pam/auth-pam.c	2013-01-09 06:36:53.012563695 +0100
-@@ -696,7 +696,7 @@
-   struct user_pass up;
-   int command;
+--- openvpn-2.4.0/src/plugins/auth-pam/auth-pam.c~	2016-12-26 12:51:00.000000000 +0100
++++ openvpn-2.4.0/src/plugins/auth-pam/auth-pam.c	2016-12-29 23:25:05.328832460 +0100
+@@ -698,7 +698,7 @@ pam_server(int fd, const char *service,
+     struct user_pass up;
+     int command;
  #ifdef USE_PAM_DLOPEN
--  static const char pam_so[] = "libpam.so";
-+  static const char pam_so[] = "libpam.so.0";
+-    static const char pam_so[] = "libpam.so";
++    static const char pam_so[] = "libpam.so.0";
  #endif
  
-   /*
+     /*
