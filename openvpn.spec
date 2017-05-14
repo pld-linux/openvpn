@@ -1,3 +1,4 @@
+# TODO: compare PLD vs upstream provided systemd support, maybe we can switch?
 #
 # Conditional build:
 %bcond_without	pkcs11		# PKCS#11 support
@@ -24,8 +25,9 @@ BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
+BuildRequires:	lz4-devel >= 1:1.7
 BuildRequires:	lzo-devel
-BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	openssl-devel >= 0.9.8
 %{?with_pkcs11:BuildRequires:	p11-kit-devel}
 BuildRequires:	pam-devel
 %{?with_pkcs11:BuildRequires:	pkcs11-helper-devel >= 1.11}
@@ -37,6 +39,7 @@ BuildRequires:	xz
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	/sbin/ip
+Requires:	openssl >= 0.9.8
 %{?with_pkcs11:Requires:	pkcs11-helper >= 1.11}
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
@@ -142,12 +145,13 @@ sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE7} > contrib/update-re
 %{__autoheader}
 %{__autoconf}
 %{__automake}
-
+CPPFLAGS="%{rpmcppflags} $(pkg-config --cflags liblz4)"
 %configure \
 	IFCONFIG=/sbin/ifconfig \
 	IPROUTE=/sbin/ip \
-	ROUTE=/sbin/route \
 	NETSTAT=/bin/netstat \
+	ROUTE=/sbin/route \
+	SYSTEMD_UNIT_DIR=%{systemdunitdir} \
 	ac_cv_nsl_inet_ntoa=no \
 	ac_cv_socket_socket=no \
 	ac_cv_resolv_gethostbyname=no \
@@ -220,10 +224,14 @@ exit 0
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(755,root,root) %{systemdunitdir}-generators/%{name}-service-generator
-%{systemdunitdir}/%{name}.service
-%{systemdunitdir}/%{name}.target
-%{systemdunitdir}/%{name}@.service
+%attr(755,root,root) %{systemdunitdir}-generators/openvpn-service-generator
+# PLD-specific
+%{systemdunitdir}/openvpn.service
+%{systemdunitdir}/openvpn.target
+%{systemdunitdir}/openvpn@.service
+# upstream provided
+#%{systemdunitdir}/openvpn-client@.service
+#%{systemdunitdir}/openvpn-server@.service
 %dir %{_libdir}/%{name}
 %attr(755,root,root) %{_libdir}/%{name}/client.down
 %attr(755,root,root) %{_libdir}/%{name}/client.up
