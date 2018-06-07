@@ -6,12 +6,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.4.4
+Version:	2.4.6
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	7a2002aad1671b24457bc9432a0c5c52
+# Source0-md5:	3a1f3f63bdaede443b4df49957df9405
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -159,7 +159,8 @@ CPPFLAGS="%{rpmcppflags} $(pkg-config --cflags liblz4)"
 	--enable-password-save \
 	%{?with_pkcs11:--enable-pkcs11} \
 	--enable-selinux \
-	--enable-systemd
+	--enable-systemd \
+	--with-crypto-library=openssl
 
 %{__make}
 
