@@ -6,12 +6,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.4.6
-Release:	2
+Version:	2.4.7
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	http://swupdate.openvpn.net/community/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	3a1f3f63bdaede443b4df49957df9405
+Source0:	https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
+# Source0-md5:	4ad8a008e1e7f261b3aa0024e79e7fb7
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -20,7 +20,7 @@ Source5:	%{name}.target
 Source6:	%{name}@.service
 Source7:	%{name}-update-resolv-conf
 Patch0:		%{name}-pam.patch
-URL:		http://www.openvpn.net/
+URL:		https://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	libselinux-devel
