@@ -25,7 +25,7 @@ BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
-BuildRequires:	lz4-devel >= 1:1.7
+BuildRequires:	lz4-devel >= 1:1.7.1
 BuildRequires:	lzo-devel
 BuildRequires:	openssl-devel >= 0.9.8
 %{?with_pkcs11:BuildRequires:	p11-kit-devel}
@@ -33,15 +33,17 @@ BuildRequires:	pam-devel
 %{?with_pkcs11:BuildRequires:	pkcs11-helper-devel >= 1.11}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.671
-BuildRequires:	systemd-devel
+BuildRequires:	systemd-devel >= 1:217
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	/sbin/ip
+Requires:	lz4 >= 1:1.7.1
 Requires:	openssl >= 0.9.8
 %{?with_pkcs11:Requires:	pkcs11-helper >= 1.11}
 Requires:	rc-scripts >= 0.4.3.0
+Requires:	systemd-libs >= 1:217
 Requires:	systemd-units >= 38
 Requires:	uname(release) >= 2.4
 Suggests:	%{name}-plugin-auth-pam
@@ -219,8 +221,7 @@ exit 0
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README* ChangeLog sample/sample-{config-files,keys,scripts} doc/management-notes.txt
-%doc *.IPv6
+%doc AUTHORS COPYING ChangeLog Changes.rst PORTS README* TODO.IPv6 doc/management-notes.txt sample/sample-{config-files,keys,scripts}
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
