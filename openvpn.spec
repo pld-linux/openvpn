@@ -6,12 +6,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.4.9
+Version:	2.5.0
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	446df6dc29364d00929ea9c725412cb8
+# Source0-md5:	ba426e2217833b522810d6c06f7cc8f7
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -158,10 +158,11 @@ CPPFLAGS="%{rpmcppflags} $(pkg-config --cflags liblz4)"
 	ac_cv_socket_socket=no \
 	ac_cv_resolv_gethostbyname=no \
 	--enable-iproute2 \
-	--enable-password-save \
 	%{?with_pkcs11:--enable-pkcs11} \
+	--enable-async-push \
 	--enable-selinux \
 	--enable-systemd \
+	--enable-x509-alt-username \
 	--with-crypto-library=openssl
 
 %{__make}
