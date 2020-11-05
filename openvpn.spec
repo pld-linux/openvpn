@@ -1,4 +1,4 @@
-# TODO: compare PLD vs upstream provided systemd support, maybe we can switch?
+# TODO: compare PLD vs upstream provided systemd support, maybe we can switch? (see also files section)
 #
 # Conditional build:
 %bcond_without	pkcs11		# PKCS#11 support
@@ -27,7 +27,8 @@ BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	lz4-devel >= 1:1.7.1
 BuildRequires:	lzo-devel
-BuildRequires:	openssl-devel >= 0.9.8
+# or mbedtls-devel >= 2
+BuildRequires:	openssl-devel >= 1.0.2
 %{?with_pkcs11:BuildRequires:	p11-kit-devel}
 BuildRequires:	pam-devel
 %{?with_pkcs11:BuildRequires:	pkcs11-helper-devel >= 1.11}
@@ -40,7 +41,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	/sbin/ip
 Requires:	lz4 >= 1:1.7.1
-Requires:	openssl >= 0.9.8
+Requires:	openssl >= 1.0.2
 %{?with_pkcs11:Requires:	pkcs11-helper >= 1.11}
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-libs >= 1:217
