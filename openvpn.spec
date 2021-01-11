@@ -2,6 +2,7 @@
 #
 # Conditional build:
 %bcond_without	pkcs11		# PKCS#11 support
+%bcond_without	tests
 
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
@@ -167,6 +168,10 @@ CPPFLAGS="%{rpmcppflags} $(pkg-config --cflags liblz4)"
 	--with-crypto-library=openssl
 
 %{__make}
+
+%if %{with tests}
+%{__make} check
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
