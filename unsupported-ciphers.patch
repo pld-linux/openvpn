@@ -1,0 +1,11 @@
+--- openvpn-2.5.4/tests/t_lpback.sh~	2021-10-05 07:56:26.000000000 +0200
++++ openvpn-2.5.4/tests/t_lpback.sh	2021-10-29 15:02:09.952131872 +0200
+@@ -46,7 +46,7 @@
+ do
+     printf "Testing cipher ${cipher}... "
+     ( "${top_builddir}/src/openvpn/openvpn" --test-crypto --secret key.$$ --cipher ${cipher} ) >log.$$ 2>&1
+-    if [ $? != 0 ] ; then
++    if [ $? != 0 ] && ! grep "OpenSSL: error:0308010C:digital envelope routines::unsupported" log.$$; then
+         echo "FAILED"
+         cat log.$$
+         e=1

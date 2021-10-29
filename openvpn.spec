@@ -21,6 +21,7 @@ Source5:	%{name}.target
 Source6:	%{name}@.service
 Source7:	%{name}-update-resolv-conf
 Patch0:		%{name}-pam.patch
+Patch1:		unsupported-ciphers.patch
 Patch100:	0038-Deprecate-ecdh-curve-with-OpenSSL-3.0-and-adjust-mbe.patch
 Patch101:	0039-Use-EVP_PKEY-based-API-for-loading-DH-keys.patch
 Patch102:	0040-Remove-DES-check-with-OpenSSL-3.0.patch
@@ -156,6 +157,7 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 %patch106 -p1
 %patch107 -p1
 %patch0 -p1
+%patch1 -p1
 
 sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE7} > contrib/update-resolv-conf
 
