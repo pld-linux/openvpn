@@ -21,6 +21,14 @@ Source5:	%{name}.target
 Source6:	%{name}@.service
 Source7:	%{name}-update-resolv-conf
 Patch0:		%{name}-pam.patch
+Patch100:	0038-Deprecate-ecdh-curve-with-OpenSSL-3.0-and-adjust-mbe.patch
+Patch101:	0039-Use-EVP_PKEY-based-API-for-loading-DH-keys.patch
+Patch102:	0040-Remove-DES-check-with-OpenSSL-3.0.patch
+Patch103:	0043-Ensure-the-current-common_name-is-in-the-environment.patch
+Patch104:	0044-Don-t-manually-free-DH-params-in-OpenSSL-3.patch
+Patch105:	0045-Do-not-allow-CTS-ciphers.patch
+Patch106:	0046-Use-new-EVP_MAC-API-for-HMAC-implementation.patch
+Patch107:	0047-Add-with-openssl-engine-autoconf-option-auto-yes-no.patch
 URL:		https://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -139,6 +147,14 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 
 %prep
 %setup -q
+%patch100 -p1
+%patch101 -p1
+%patch102 -p1
+%patch103 -p1
+%patch104 -p1
+%patch105 -p1
+%patch106 -p1
+%patch107 -p1
 %patch0 -p1
 
 sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE7} > contrib/update-resolv-conf

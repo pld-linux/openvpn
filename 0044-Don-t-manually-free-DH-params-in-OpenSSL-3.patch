@@ -1,0 +1,34 @@
+From 4daed27f28f6bb3033e659328fe80322a8f4b5e1 Mon Sep 17 00:00:00 2001
+From: Max Fillinger <maximilian.fillinger@foxcrypto.com>
+Date: Mon, 25 Oct 2021 16:53:14 +0200
+Subject: [PATCH 44/47] Don't manually free DH params in OpenSSL 3
+
+When the EVP_PKEY object with the Diffie-Hellman parameters is passed
+to SSL_CTX_set0_tmp_dh_pkey, it does not create a copy but stores the
+pointer in the SSL_CTX. Therefore, we should not free it.
+
+The EVP_PKEY will be freed automatically when we free the SSL_CTX.
+
+Trac: #1436
+
+Signed-off-by: Max Fillinger <maximilian.fillinger@foxcrypto.com>
+Acked-by:
+Message-Id: <20211025145314.23009-1-maximilian.fillinger@foxcrypto.com>
+URL: https://www.mail-archive.com/search?l=mid&q=20211025145314.23009-1-maximilian.fillinger@foxcrypto.com
+Signed-off-by: Gert Doering <gert@greenie.muc.de>
+---
+ src/openvpn/ssl_openssl.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff -urNp -x '*.orig' openvpn-2.5.4.org/src/openvpn/ssl_openssl.c openvpn-2.5.4/src/openvpn/ssl_openssl.c
+--- openvpn-2.5.4.org/src/openvpn/ssl_openssl.c	2021-10-29 13:56:56.453449295 +0200
++++ openvpn-2.5.4/src/openvpn/ssl_openssl.c	2021-10-29 13:56:56.593453411 +0200
+@@ -696,8 +696,6 @@ tls_ctx_load_dh_params(struct tls_root_c
+ 
+     msg(D_TLS_DEBUG_LOW, "Diffie-Hellman initialized with %d bit key",
+         8 * EVP_PKEY_get_size(dh));
+-
+-    EVP_PKEY_free(dh);
+ #else
+     DH *dh = PEM_read_bio_DHparams(bio, NULL, NULL, NULL);
+     BIO_free(bio);

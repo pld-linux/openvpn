@@ -1,0 +1,33 @@
+From 14e4f3b1583749adf104be362a3e2422e0c9e524 Mon Sep 17 00:00:00 2001
+From: Arne Schwabe <arne@rfc2549.org>
+Date: Tue, 19 Oct 2021 20:31:21 +0200
+Subject: [PATCH 45/47] Do not allow CTS ciphers
+
+We do not support CTS algorithms (cipher text stealing) algorithms.
+
+Signed-off-by: Arne Schwabe <arne@rfc2549.org>
+Acked-by: Max Fillinger <maximilian.fillinger@foxcrypto.com>
+Message-Id: <20211019183127.614175-16-arne@rfc2549.org>
+URL: https://www.mail-archive.com/openvpn-devel@lists.sourceforge.net/msg23002.html
+Signed-off-by: Gert Doering <gert@greenie.muc.de>
+---
+ src/openvpn/crypto_openssl.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/openvpn/crypto_openssl.c b/src/openvpn/crypto_openssl.c
+index c8fe0d0f..d4792f46 100644
+--- a/src/openvpn/crypto_openssl.c
++++ b/src/openvpn/crypto_openssl.c
+@@ -708,6 +708,9 @@ cipher_kt_mode_cbc(const cipher_kt_t *cipher)
+ {
+     return cipher && cipher_kt_mode(cipher) == OPENVPN_MODE_CBC
+            /* Exclude AEAD cipher modes, they require a different API */
++#ifdef EVP_CIPH_FLAG_CTS
++           && !(EVP_CIPHER_flags(cipher) & EVP_CIPH_FLAG_CTS)
++#endif
+            && !(EVP_CIPHER_flags(cipher) & EVP_CIPH_FLAG_AEAD_CIPHER);
+ }
+ 
+-- 
+2.33.1
+
