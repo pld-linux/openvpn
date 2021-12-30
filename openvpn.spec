@@ -7,12 +7,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.5.4
+Version:	2.5.5
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	336be3b2388cdc65dd8c81f22b1c2836
+# Source0-md5:	e469f55a223677b4cb6c7f4541065f5a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -25,7 +25,6 @@ Patch1:		unsupported-ciphers.patch
 Patch100:	0038-Deprecate-ecdh-curve-with-OpenSSL-3.0-and-adjust-mbe.patch
 Patch101:	0039-Use-EVP_PKEY-based-API-for-loading-DH-keys.patch
 Patch102:	0040-Remove-DES-check-with-OpenSSL-3.0.patch
-Patch103:	0043-Ensure-the-current-common_name-is-in-the-environment.patch
 Patch104:	0044-Don-t-manually-free-DH-params-in-OpenSSL-3.patch
 Patch105:	0045-Do-not-allow-CTS-ciphers.patch
 Patch106:	0046-Use-new-EVP_MAC-API-for-HMAC-implementation.patch
@@ -151,7 +150,6 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
-%patch103 -p1
 %patch104 -p1
 %patch105 -p1
 %patch106 -p1
@@ -264,6 +262,7 @@ exit 0
 %attr(755,root,root) %{_libdir}/%{name}/client.up
 %attr(755,root,root) %{_libdir}/%{name}/update-resolv-conf
 %dir %{_libdir}/%{name}/plugins
+%{_mandir}/man5/openvpn.5*
 %{_mandir}/man8/openvpn.8*
 %dir /var/run/openvpn
 %{systemdtmpfilesdir}/%{name}.conf
