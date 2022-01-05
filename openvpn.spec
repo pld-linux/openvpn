@@ -262,7 +262,7 @@ exit 0
 %attr(755,root,root) %{_libdir}/%{name}/client.up
 %attr(755,root,root) %{_libdir}/%{name}/update-resolv-conf
 %dir %{_libdir}/%{name}/plugins
-%{_mandir}/man5/openvpn.5*
+%{_mandir}/man5/openvpn-examples.5*
 %{_mandir}/man8/openvpn.8*
 %dir /var/run/openvpn
 %{systemdtmpfilesdir}/%{name}.conf
