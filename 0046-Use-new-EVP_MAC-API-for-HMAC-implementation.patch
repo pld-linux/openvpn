@@ -174,7 +174,7 @@ diff --git a/src/openvpn/crypto_openssl.h b/src/openvpn/crypto_openssl.h
 index 59a31aac..e540a76b 100644
 --- a/src/openvpn/crypto_openssl.h
 +++ b/src/openvpn/crypto_openssl.h
-@@ -47,7 +47,15 @@ typedef EVP_CIPHER_CTX cipher_ctx_t;
+@@ -51,7 +51,16 @@ typedef EVP_CIPHER_CTX cipher_ctx_t;
  typedef EVP_MD_CTX md_ctx_t;
  
  /** Generic HMAC %context. */
@@ -187,9 +187,8 @@ index 59a31aac..e540a76b 100644
 +    EVP_MAC_CTX *ctx;
 +} hmac_ctx_t;
 +#endif
++
  
- /** Maximum length of an IV */
- #define OPENVPN_MAX_IV_LENGTH   EVP_MAX_IV_LENGTH
--- 
-2.33.1
+ #if OPENSSL_VERSION_NUMBER < 0x30000000L
+ /* Use a dummy type for the provider */
 

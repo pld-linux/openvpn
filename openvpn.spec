@@ -7,12 +7,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.5.6
+Version:	2.5.7
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	3d0717bd3eb498b3dec1277b3a65a0a1
+# Source0-md5:	6893bc6b4cc24b15471408200864ce3f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -28,7 +28,6 @@ Patch102:	0040-Remove-DES-check-with-OpenSSL-3.0.patch
 Patch104:	0044-Don-t-manually-free-DH-params-in-OpenSSL-3.patch
 Patch105:	0045-Do-not-allow-CTS-ciphers.patch
 Patch106:	0046-Use-new-EVP_MAC-API-for-HMAC-implementation.patch
-Patch107:	0047-Add-with-openssl-engine-autoconf-option-auto-yes-no.patch
 URL:		https://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -153,7 +152,6 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 %patch104 -p1
 %patch105 -p1
 %patch106 -p1
-%patch107 -p1
 %patch0 -p1
 %patch1 -p1
 
