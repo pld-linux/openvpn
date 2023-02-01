@@ -7,12 +7,12 @@
 Summary:	VPN Daemon
 Summary(pl.UTF-8):	Serwer VPN
 Name:		openvpn
-Version:	2.5.7
+Version:	2.6.0
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	6893bc6b4cc24b15471408200864ce3f
+Source0:        https://swupdate.openvpn.org/community/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	f46e8182bfee0b1634807e6ab2a220ef
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -21,7 +21,6 @@ Source5:	%{name}.target
 Source6:	%{name}@.service
 Source7:	%{name}-update-resolv-conf
 Patch0:		%{name}-pam.patch
-Patch1:		unsupported-ciphers.patch
 URL:		https://www.openvpn.net/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -141,7 +140,6 @@ Ten pakiet zawiera pliki nagłówkowe do tworzenia wtyczek OpenVPN.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 sed -e 's,/''usr/lib/openvpn,%{_libdir}/%{name},' %{SOURCE7} > contrib/update-resolv-conf
 
@@ -158,6 +156,7 @@ CPPFLAGS="%{rpmcppflags} $(pkg-config --cflags liblz4)"
 	NETSTAT=/bin/netstat \
 	ROUTE=/sbin/route \
 	SYSTEMD_UNIT_DIR=%{systemdunitdir} \
+        TMPFILES_DIR=%{_tmpfilesdir} \
 	ac_cv_nsl_inet_ntoa=no \
 	ac_cv_socket_socket=no \
 	ac_cv_resolv_gethostbyname=no \
@@ -230,7 +229,7 @@ exit 0
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog Changes.rst PORTS README* TODO.IPv6 doc/management-notes.txt sample/sample-{config-files,keys,scripts}
+%doc AUTHORS COPYING ChangeLog Changes.rst PORTS README* doc/management-notes.txt sample/sample-{config-files,keys,scripts}
 %dir %{_sysconfdir}/openvpn
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/openvpn
